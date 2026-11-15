@@ -1,0 +1,37 @@
+# Environment and Secrets (CRITICAL: Do NOT remove)
+.env
+*.env
+.env.*
+!.env.example
+django_app/.env
+
+# Python Bytecode & Cache
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+.venv/
+
+# Django local database & logs
+db.sqlite3
+db.sqlite3-journal
+*.log
+
+# Uploaded and processed documents (User privacy)
+django_app/media/uploads/*
+django_app/media/redacted/*
+django_app/media/redaction_maps/*
+!django_app/media/uploads/.gitkeep
+!django_app/media/redacted/.gitkeep
+!django_app/media/redaction_maps/.gitkeep
+
+# IDE & OS files
+.vscode/
+.idea/
+*.swp
+*.swo
+.DS_Store
+Thumbs.db

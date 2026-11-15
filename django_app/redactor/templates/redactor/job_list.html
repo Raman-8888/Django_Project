@@ -1,0 +1,106 @@
+{% extends "redactor/base.html" %}
+
+{% block title %}All Jobs — Legal Docs Redactor{% endblock %}
+
+{% block extra_head %}
+<style>
+    .page-hero {
+        background: linear-gradient(135deg, #1a237e 0%, #3949ab 100%);
+        color: #fff;
+        border-radius: .75rem;
+        padding: 1.5rem 2rem;
+    }
+    .jobs-table th { background-color: #f1f3ff; }
+    .status-dot {
+        display: inline-block;
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        margin-right: 6px;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+
+<!-- ===== PAGE HEADER ===== -->
+<div class="page-hero shadow mb-4 d-flex justify-content-between align-items-center flex-wrap gap-3">
+    <div>
+        <h4 class="fw-bold mb-1"><i class="bi bi-list-task me-2"></i>All Redaction Jobs</h4>
+        <p class="mb-0 opacity-75">{{ jobs|length }} job{{ jobs|length|pluralize }} found</p>
+    </div>
+    <a href="{% url 'index' %}" class="btn btn-light">
+        <i class="bi bi-plus-lg me-1"></i>New Job
+    </a>
+</div>
+
+<!-- ===== TABLE ===== -->
+<div class="card shadow-sm">
+    <div class="card-body p-0">
+        {% if jobs %}
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0 jobs-table">
+                <thead>
+                    <tr>
+                        <th class="ps-4">Job ID</th>
+                        <th>Created At</th>
+                        <th>Status</th>
+                        <th># Files</th>
+                        <th>Completed</th>
+                        <th>Failed</th>
+                        <th class="text-end pe-4">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for job in jobs %}
+                <tr>
+                    <td class="ps-4 fw-semibold">#{{ job.pk }}</td>
+                    <td>{{ job.created_at|date:"N j, Y — g:i A" }}</td>
+                    <td>
+                        <span class="badge rounded-pill
+                            {% if job.status == 'COMPLETED' %}bg-success
+                            {% elif job.status == 'PROCESSING' %}bg-warning text-dark
+                            {% elif job.status == 'FAILED' %}bg-danger
+                            {% else %}bg-secondary{% endif %}">
+                            {% if job.status == 'PROCESSING' %}
+                            <span class="spinner-border spinner-border-sm me-1"
+                                  style="width:.65rem;height:.65rem"></span>
+                            {% endif %}
+                            {{ job.get_status_display }}
+                        </span>
+                    </td>
+                    <td>{{ job.file_count }}</td>
+                    <td>
+                        <span class="text-success fw-semibold">{{ job.completed_count }}</span>
+                    </td>
+                    <td>
+                        {% if job.failed_count > 0 %}
+                        <span class="text-danger fw-semibold">{{ job.failed_count }}</span>
+                        {% else %}
+                        <span class="text-muted">0</span>
+                        {% endif %}
+                    </td>
+                    <td class="text-end pe-4">
+                        <a href="{% url 'job_detail' job.pk %}"
+                           class="btn btn-sm btn-outline-primary">
+                            <i class="bi bi-eye me-1"></i>View
+                        </a>
+                    </td>
+                </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <div class="p-5 text-center text-muted">
+            <i class="bi bi-inbox display-3"></i>
+            <p class="mt-3 mb-2 fw-semibold">No jobs yet</p>
+            <a href="{% url 'index' %}" class="btn btn-primary mt-1">
+                <i class="bi bi-upload me-2"></i>Upload your first document
+            </a>
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,275 @@
+{% extends "redactor/base.html" %}
+
+{% block title %}Upload Documents — Legal Docs Redactor{% endblock %}
+
+{% block extra_head %}
+<style>
+    .hero {
+        background: linear-gradient(135deg, #1a237e 0%, #3949ab 100%);
+        color: #fff;
+        border-radius: 1rem;
+        padding: 3rem 2rem;
+    }
+    .hero h1 { font-weight: 800; font-size: 2.4rem; }
+    .hero p  { font-size: 1.1rem; opacity: .9; max-width: 600px; }
+
+    /* Drag-and-drop zone */
+    #drop-zone {
+        border: 2.5px dashed #9fa8da;
+        border-radius: .75rem;
+        background: #f0f2ff;
+        cursor: pointer;
+        transition: border-color .2s, background .2s;
+        padding: 2.5rem 1.5rem;
+        text-align: center;
+    }
+    #drop-zone.dragover,
+    #drop-zone:hover {
+        border-color: #3949ab;
+        background: #e8eaf6;
+    }
+    #drop-zone i { font-size: 3rem; color: #3949ab; }
+    #drop-zone p { margin: .5rem 0 0; color: #555; }
+
+    #file-list .badge { font-size: .8rem; }
+
+    .entity-table th { background-color: #1a237e; color: #fff; }
+
+    .btn-upload {
+        background: linear-gradient(90deg, #1a237e, #3949ab);
+        border: none;
+        font-size: 1.1rem;
+        padding: .65rem 2.2rem;
+        border-radius: 2rem;
+        transition: opacity .2s;
+    }
+    .btn-upload:hover { opacity: .9; }
+</style>
+{% endblock %}
+
+{% block content %}
+
+<!-- ===== HERO ===== -->
+<div class="hero mb-5 shadow">
+    <h1><i class="bi bi-shield-lock-fill me-2"></i>Legal Document Redactor</h1>
+    <p class="mb-0">
+        Automatically detect and redact personally identifiable information (PII)
+        from your PDF, DOC, and DOCX legal documents. Upload your files below and
+        download clean, redacted versions in seconds.
+    </p>
+</div>
+
+<!-- ===== ALERT ===== -->
+{% if error %}
+<div class="alert alert-danger alert-dismissible fade show" role="alert">
+    <i class="bi bi-exclamation-triangle-fill me-2"></i>{{ error }}
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+</div>
+{% endif %}
+
+<div class="row g-4">
+
+    <!-- ===== UPLOAD CARD ===== -->
+    <div class="col-lg-7">
+        <div class="card shadow-sm h-100">
+            <div class="card-header bg-white border-bottom-0 pt-4 pb-0 px-4">
+                <h5 class="fw-bold mb-0">
+                    <i class="bi bi-cloud-arrow-up-fill text-primary me-2"></i>
+                    Upload Files for Redaction
+                </h5>
+                <p class="text-muted small mt-1">Accepts PDF, DOC, and DOCX files. Multiple files allowed.</p>
+            </div>
+            <div class="card-body px-4 pb-4">
+                <form method="post" enctype="multipart/form-data" id="upload-form">
+                    {% csrf_token %}
+
+                    <!-- Drop Zone -->
+                    <div id="drop-zone" onclick="document.getElementById('file-input').click()">
+                        <i class="bi bi-file-earmark-arrow-up"></i>
+                        <p class="fw-semibold mt-2 mb-0">Drag &amp; drop files here</p>
+                        <p class="small text-muted">or click to browse</p>
+                    </div>
+
+                    <!-- Hidden file input -->
+                    <input type="file"
+                           id="file-input"
+                           name="documents"
+                           multiple
+                           accept=".pdf,.doc,.docx"
+                           class="d-none">
+
+                    <!-- File list preview -->
+                    <ul class="list-group mt-3 mb-3" id="file-list"></ul>
+
+                    <div class="d-grid">
+                        <button type="submit" class="btn btn-primary btn-upload text-white" id="submit-btn" disabled>
+                            <i class="bi bi-shield-check me-2"></i>Upload &amp; Redact
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== INFO CARD ===== -->
+    <div class="col-lg-5">
+        <div class="card shadow-sm h-100">
+            <div class="card-header bg-white border-bottom-0 pt-4 pb-0 px-4">
+                <h5 class="fw-bold mb-0">
+                    <i class="bi bi-info-circle-fill text-primary me-2"></i>
+                    What Gets Redacted?
+                </h5>
+                <p class="text-muted small mt-1">Using spaCy NLP (en_core_web_trf) named-entity recognition.</p>
+            </div>
+            <div class="card-body px-4 pb-4">
+                <table class="table table-bordered table-hover entity-table align-middle mb-0">
+                    <thead>
+                        <tr>
+                            <th>Entity Type</th>
+                            <th>Action</th>
+                            <th>Example Output</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><span class="badge bg-secondary">DATE</span></td>
+                            <td>Mask</td>
+                            <td><code>XXXXX</code></td>
+                        </tr>
+                        <tr>
+                            <td><span class="badge bg-secondary">MONEY</span></td>
+                            <td>Mask</td>
+                            <td><code>XXXXX</code></td>
+                        </tr>
+                        <tr>
+                            <td><span class="badge bg-secondary">PERCENT</span></td>
+                            <td>Mask</td>
+                            <td><code>XXXXX</code></td>
+                        </tr>
+                        <tr>
+                            <td><span class="badge bg-secondary">QUANTITY</span></td>
+                            <td>Mask</td>
+                            <td><code>XXXXX</code></td>
+                        </tr>
+                        <tr>
+                            <td><span class="badge bg-secondary">TIME</span></td>
+                            <td>Mask</td>
+                            <td><code>XXXXX</code></td>
+                        </tr>
+                        <tr class="table-primary">
+                            <td><span class="badge bg-primary">PERSON</span></td>
+                            <td>Replace</td>
+                            <td><code>PERSON_1</code>, <code>PERSON_2</code> …</td>
+                        </tr>
+                        <tr class="table-primary">
+                            <td><span class="badge bg-primary">ORG</span></td>
+                            <td>Replace</td>
+                            <td><code>ORG_1</code>, <code>ORG_2</code> …</td>
+                        </tr>
+                        <tr class="table-primary">
+                            <td><span class="badge bg-primary">PRODUCT</span></td>
+                            <td>Replace</td>
+                            <td><code>PRODUCT_1</code> …</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <p class="small text-muted mt-3 mb-0">
+                    <i class="bi bi-info-circle me-1"></i>
+                    Similar names (e.g. "John Smith" vs "J. Smith") are grouped and assigned
+                    the same replacement label using fuzzy matching.
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block extra_js %}
+<script>
+(function () {
+    const dropZone  = document.getElementById('drop-zone');
+    const fileInput = document.getElementById('file-input');
+    const fileList  = document.getElementById('file-list');
+    const submitBtn = document.getElementById('submit-btn');
+    const form      = document.getElementById('upload-form');
+
+    const ALLOWED_EXT = ['.pdf', '.doc', '.docx'];
+    let selectedFiles = [];   // DataTransfer-backed FileList replacement
+
+    function extOf(name) {
+        return name.slice(name.lastIndexOf('.')).toLowerCase();
+    }
+
+    function renderFileList() {
+        fileList.innerHTML = '';
+        selectedFiles.forEach((f, idx) => {
+            const ext   = extOf(f.name);
+            const valid = ALLOWED_EXT.includes(ext);
+            const li    = document.createElement('li');
+            li.className = 'list-group-item d-flex justify-content-between align-items-center';
+            li.innerHTML = `
+                <span>
+                    <i class="bi bi-file-earmark-text me-2 text-primary"></i>
+                    <span class="text-truncate" style="max-width:260px;display:inline-block;vertical-align:middle"
+                          title="${f.name}">${f.name}</span>
+                </span>
+                <span class="d-flex align-items-center gap-2">
+                    <span class="badge ${valid ? 'bg-success' : 'bg-danger'}">${ext}</span>
+                    <button type="button" class="btn btn-sm btn-outline-danger py-0 px-1 remove-btn"
+                            data-idx="${idx}" title="Remove">
+                        <i class="bi bi-x-lg"></i>
+                    </button>
+                </span>
+            `;
+            fileList.appendChild(li);
+        });
+
+        // Sync a real FileList into the input via DataTransfer
+        const dt = new DataTransfer();
+        selectedFiles.forEach(f => dt.items.add(f));
+        fileInput.files = dt.files;
+
+        submitBtn.disabled = selectedFiles.length === 0;
+    }
+
+    function addFiles(newFiles) {
+        const names = new Set(selectedFiles.map(f => f.name));
+        Array.from(newFiles).forEach(f => {
+            if (!names.has(f.name)) {
+                selectedFiles.push(f);
+                names.add(f.name);
+            }
+        });
+        renderFileList();
+    }
+
+    // Remove button
+    fileList.addEventListener('click', e => {
+        const btn = e.target.closest('.remove-btn');
+        if (!btn) return;
+        const idx = parseInt(btn.dataset.idx, 10);
+        selectedFiles.splice(idx, 1);
+        renderFileList();
+    });
+
+    // File input change
+    fileInput.addEventListener('change', () => addFiles(fileInput.files));
+
+    // Drag-and-drop
+    dropZone.addEventListener('dragover', e => { e.preventDefault(); dropZone.classList.add('dragover'); });
+    dropZone.addEventListener('dragleave', () => dropZone.classList.remove('dragover'));
+    dropZone.addEventListener('drop', e => {
+        e.preventDefault();
+        dropZone.classList.remove('dragover');
+        addFiles(e.dataTransfer.files);
+    });
+
+    // Show spinner on submit
+    form.addEventListener('submit', () => {
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Uploading…';
+    });
+})();
+</script>
+{% endblock %}

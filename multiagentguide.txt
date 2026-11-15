@@ -1,0 +1,198 @@
+================================================================
+  MULTI-AGENT UPGRADE GUIDE — Legal Document Redactor
+  Follow these steps in order. Each phase is self-contained.
+================================================================
+
+
+----------------------------------------------------------------
+PHASE 1 — Add LLM-based PII Detection (biggest impact, 1 day)
+----------------------------------------------------------------
+
+GOAL: Catch phone numbers, emails, Aadhaar/PAN, addresses —
+      all the PII that spaCy completely misses today.
+
+STEP 1: Get a Gemini API key
+  a. Go to https://aistudio.google.com/app/apikey
+  b. Click "Create API Key"
+  c. Copy the key
+
+STEP 2: Add the key to your .env file
+  Open: d:\scaler_ai\django_app\.env
+  Add this line:
+      GEMINI_API_KEY=your-key-here
+
+STEP 3: Install the Gemini SDK
+  Run in terminal:
+      pip install google-generativeai
+
+STEP 4: Create the agents folder
+  Create this folder: d:\scaler_ai\agents\
+  Create an empty file inside it: d:\scaler_ai\agents\__init__.py
+
+STEP 5: Create the LLM Detector Agent
+  Create file: d:\scaler_ai\agents\llm_detector.py
+  Tell me when done — I will write the full code for you.
+
+STEP 6: Wire it into the existing pipeline
+  I will update: d:\scaler_ai\legal_docs_redaction\src\spacy_redaction.py
+  to call the LLM detector after spaCy and merge the results.
+
+STEP 7: Test
+  - Start the server: cd d:\scaler_ai\django_app && python manage.py runserver
+  - Upload any DOCX with a phone number, email, or Aadhaar number
+  - Confirm it now gets redacted in the output
+
+
+----------------------------------------------------------------
+PHASE 2 — Classifier Agent (1 day)
+----------------------------------------------------------------
+
+GOAL: Detect the document type (CV, Contract, Medical, etc.)
+      and apply the right redaction policy for that type.
+
+STEP 1: Create the Classifier Agent
+  Create file: d:\scaler_ai\agents\classifier.py
+  Tell me when done — I will write the full code.
+
+STEP 2: Create the redaction policies config
+  Create file: d:\scaler_ai\agents\policies.py
+  This will define which PII fields to redact per document type:
+      CV/Resume      → name, DOB, phone, email, address, LinkedIn
+      Contract       → party names, dates, financial amounts, signatures
+      Medical Record → patient name, DOB, diagnosis, doctor name
+      Court Filing   → party names, case numbers, addresses
+      Financial      → account numbers, PAN, amounts, company names
+
+STEP 3: Call Classifier before Redaction
+  I will update: d:\scaler_ai\django_app\redactor\tasks.py
+  to run the classifier first and pass the policy into DataRedaction.
+
+STEP 4: Test
+  - Upload a CV — confirm only CV-relevant PII is redacted
+  - Upload a contract — confirm party names and amounts are redacted
+
+
+----------------------------------------------------------------
+PHASE 3 — Verifier Agent (1 day)
+----------------------------------------------------------------
+
+GOAL: Remove false positives — things spaCy wrongly flags as PII.
+      Examples: "Apple" (fruit, not company), "May" (name, not month),
+      "India" (country, not organisation).
+
+STEP 1: Create the Verifier Agent
+  Create file: d:\scaler_ai\agents\verifier.py
+  Tell me when done — I will write the full code.
+
+STEP 2: Wire it between Detector and Redactor
+  The pipeline will become:
+      spaCy detect → LLM detect → Verifier filters → Redactor applies
+
+STEP 3: Test
+  - Upload a document containing "Apple" (the fruit) in a sentence
+  - Confirm it is NOT redacted in the output
+  - Check the redaction map CSV — it should show confidence scores
+
+
+----------------------------------------------------------------
+PHASE 4 — QA Agent (1 day)
+----------------------------------------------------------------
+
+GOAL: Scan the redacted output and flag any PII that survived.
+      Give each job a confidence score and an audit report.
+
+STEP 1: Create the QA Agent
+  Create file: d:\scaler_ai\agents\qa_agent.py
+  Tell me when done — I will write the full code.
+
+STEP 2: Create a QA Report model
+  I will update: d:\scaler_ai\django_app\redactor\models.py
+  to add a QAReport model with fields:
+      confidence_score, surviving_pii_count, flagged_items, created_at
+
+STEP 3: Run migrations
+      cd d:\scaler_ai\django_app
+      python manage.py makemigrations
+      python manage.py migrate
+
+STEP 4: Show QA results in the UI
+  I will update: d:\scaler_ai\django_app\redactor\templates\redactor\job_detail.html
+  to show the confidence score and any flagged items.
+
+STEP 5: Test
+  - Upload a document and wait for processing to finish
+  - On the job detail page you should see:
+      Confidence Score: 94%
+      Flagged for review: 0 items
+
+
+----------------------------------------------------------------
+PHASE 5 — Orchestrator Agent (1 day)
+----------------------------------------------------------------
+
+GOAL: One central controller that coordinates all agents,
+      manages state, retries failures, and writes audit trails.
+
+STEP 1: Create the Orchestrator
+  Create file: d:\scaler_ai\agents\orchestrator.py
+  Tell me when done — I will write the full code.
+
+STEP 2: Replace the threading approach with the Orchestrator
+  I will update: d:\scaler_ai\django_app\redactor\tasks.py
+  Current code runs everything in one giant function.
+  New code will call orchestrator.run(job_id) instead.
+
+STEP 3: (Optional) Replace threads with Celery for production
+  Install:  pip install celery redis
+  Run Redis: docker run -p 6379:6379 redis
+  I will convert tasks.py to Celery tasks.
+
+STEP 4: Test full pipeline end-to-end
+  Upload a document and watch the job_detail page.
+  You should see each agent's status update in real time:
+      [✓] Classifier  → Contract (confidence: 92%)
+      [✓] Detector    → 24 PII entities found
+      [✓] Verifier    → 3 false positives removed, 21 confirmed
+      [✓] Redactor    → Document redacted, formatting preserved
+      [✓] QA Agent    → Score 96%, 0 items flagged
+
+
+================================================================
+  FINAL FOLDER STRUCTURE AFTER ALL PHASES
+================================================================
+
+d:\scaler_ai\
+├── agents\
+│   ├── __init__.py
+│   ├── orchestrator.py     ← coordinates everything
+│   ├── classifier.py       ← detects document type
+│   ├── llm_detector.py     ← LLM-based PII detection
+│   ├── verifier.py         ← removes false positives
+│   ├── qa_agent.py         ← scans output for missed PII
+│   └── policies.py         ← redaction rules per doc type
+│
+├── django_app\             ← web UI (unchanged structure)
+│   └── redactor\
+│       ├── tasks.py        ← updated to call orchestrator
+│       ├── models.py       ← updated to add QAReport
+│       └── templates\
+│           └── job_detail.html  ← updated to show QA score
+│
+├── legal_docs_redaction\
+│   └── src\
+│       └── spacy_redaction.py  ← updated to accept policy + LLM entities
+│
+└── multiagentguide.txt     ← this file
+
+
+================================================================
+  READY TO START?
+================================================================
+
+Just tell me:
+  1. Which phase you want to start with (recommend Phase 1)
+  2. Your Gemini API key (or if you prefer OpenAI)
+
+Then say "go" and I will write all the code for that phase.
+
+================================================================

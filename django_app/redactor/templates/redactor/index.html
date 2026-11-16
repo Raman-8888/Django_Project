@@ -4,24 +4,6 @@
 
 {% block extra_head %}
 <style>
-    /* Fullscreen ThreeJS WebGL Canvas Container */
-    #hero-canvas-container {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        pointer-events: none;
-        z-index: 0;
-        overflow: hidden;
-    }
-
-    #three-canvas {
-        width: 100%;
-        height: 100%;
-        display: block;
-    }
-
     /* Hero Section */
     .hero-section {
         position: relative;
@@ -120,10 +102,13 @@
 
     /* Agent Card Micro-Interactions */
     .agent-card {
-        background: rgba(15, 23, 42, 0.6);
-        border: 1px solid rgba(255, 255, 255, 0.08);
-        border-radius: 1.2rem;
-        padding: 1.5rem;
+        background: rgba(15, 23, 42, 0.75);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        border-radius: 1.25rem;
+        padding: 1.6rem;
+        box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5);
         transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
         position: relative;
         overflow: hidden;
@@ -136,13 +121,13 @@
         width: 100%;
         height: 3px;
         background: linear-gradient(90deg, var(--brand-primary), var(--brand-cyan));
-        opacity: 0;
+        opacity: 0.6;
         transition: opacity 0.3s ease;
     }
     .agent-card:hover {
         transform: translateY(-6px);
-        border-color: rgba(99, 102, 241, 0.4);
-        box-shadow: 0 15px 35px -10px rgba(99, 102, 241, 0.25);
+        border-color: rgba(99, 102, 241, 0.45);
+        box-shadow: 0 20px 40px -10px rgba(99, 102, 241, 0.3);
     }
     .agent-card:hover::before {
         opacity: 1;
@@ -165,11 +150,6 @@
 {% endblock %}
 
 {% block content %}
-
-<!-- ===== 3D CANVAS BACKGROUND CONTAINER ===== -->
-<div id="hero-canvas-container">
-    <canvas id="three-canvas"></canvas>
-</div>
 
 <!-- ===== HERO & UPLOAD SECTION ===== -->
 <div class="container hero-section">
@@ -442,147 +422,7 @@
 {% block extra_scripts %}
 <script>
     // =========================================================================
-    // 1. THREE.JS 3D SILKY WAVE & GLOWING STARFIELD (Zero Square Pixels)
-    // =========================================================================
-    (function initThreeBackground() {
-        const container = document.getElementById('hero-canvas-container');
-        const canvas = document.getElementById('three-canvas');
-        if (!container || !canvas) return;
-
-        const scene = new THREE.Scene();
-        const camera = new THREE.PerspectiveCamera(55, container.clientWidth / container.clientHeight, 0.1, 1000);
-        camera.position.set(0, 18, 55);
-        camera.lookAt(0, -2, 0);
-
-        const renderer = new THREE.WebGLRenderer({ canvas: canvas, alpha: true, antialias: true });
-        renderer.setSize(container.clientWidth, container.clientHeight);
-        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-
-        // Procedural soft-glow circular particle texture (Eliminates all hard-edge squares)
-        function createGlowDotTexture() {
-            const c = document.createElement('canvas');
-            c.width = 64;
-            c.height = 64;
-            const ctx = c.getContext('2d');
-            const g = ctx.createRadialGradient(32, 32, 0, 32, 32, 32);
-            g.addColorStop(0, 'rgba(255, 255, 255, 1)');
-            g.addColorStop(0.2, 'rgba(129, 140, 248, 0.85)'); // Indigo
-            g.addColorStop(0.5, 'rgba(6, 182, 212, 0.35)');  // Cyan
-            g.addColorStop(1, 'rgba(0, 0, 0, 0)');
-            ctx.fillStyle = g;
-            ctx.fillRect(0, 0, 64, 64);
-            return new THREE.CanvasTexture(c);
-        }
-
-        const dotTexture = createGlowDotTexture();
-
-        // 1. Silky Undulating Cyber Wave Grid (Fluid Organic Motion)
-        const SEPARATION = 3.2;
-        const AMOUNTX = 50;
-        const AMOUNTY = 50;
-        const numParticles = AMOUNTX * AMOUNTY;
-
-        const positions = new Float32Array(numParticles * 3);
-        let i = 0;
-        for (let ix = 0; ix < AMOUNTX; ix++) {
-            for (let iy = 0; iy < AMOUNTY; iy++) {
-                positions[i] = ix * SEPARATION - ((AMOUNTX * SEPARATION) / 2);
-                positions[i + 1] = 0;
-                positions[i + 2] = iy * SEPARATION - ((AMOUNTY * SEPARATION) / 2);
-                i += 3;
-            }
-        }
-
-        const waveGeometry = new THREE.BufferGeometry();
-        waveGeometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
-
-        const waveMaterial = new THREE.PointsMaterial({
-            size: 3.2,
-            map: dotTexture,
-            transparent: true,
-            opacity: 0.65,
-            blending: THREE.AdditiveBlending,
-            depthWrite: false,
-        });
-
-        const waveParticles = new THREE.Points(waveGeometry, waveMaterial);
-        waveParticles.position.y = -14;
-        waveParticles.rotation.x = 0.25;
-        scene.add(waveParticles);
-
-        // 2. Ambient Floating Glowing Soft Stars
-        const ambientCount = 75;
-        const ambientPos = new Float32Array(ambientCount * 3);
-        for (let k = 0; k < ambientCount * 3; k += 3) {
-            ambientPos[k] = (Math.random() - 0.5) * 130;
-            ambientPos[k + 1] = (Math.random() - 0.5) * 80 + 10;
-            ambientPos[k + 2] = (Math.random() - 0.5) * 80;
-        }
-        const ambientGeo = new THREE.BufferGeometry();
-        ambientGeo.setAttribute('position', new THREE.BufferAttribute(ambientPos, 3));
-        const ambientMat = new THREE.PointsMaterial({
-            size: 4.5,
-            map: dotTexture,
-            transparent: true,
-            opacity: 0.45,
-            blending: THREE.AdditiveBlending,
-            depthWrite: false,
-        });
-        const ambientParticles = new THREE.Points(ambientGeo, ambientMat);
-        scene.add(ambientParticles);
-
-        // Mouse Parallax coordinates
-        let mouseX = 0, mouseY = 0;
-        let targetX = 0, targetY = 0;
-
-        window.addEventListener('mousemove', (e) => {
-            mouseX = (e.clientX - window.innerWidth / 2) * 0.03;
-            mouseY = (e.clientY - window.innerHeight / 2) * 0.03;
-        });
-
-        // Animation Loop with Fluid Wave Math
-        let count = 0;
-        function animate() {
-            requestAnimationFrame(animate);
-            count += 0.035;
-
-            // Smooth parallax lerp
-            targetX += (mouseX - targetX) * 0.05;
-            targetY += (mouseY - targetY) * 0.05;
-
-            camera.position.x = targetX;
-            camera.position.y = 18 - targetY * 0.6;
-            camera.lookAt(0, -2, 0);
-
-            // Animate Organic 3D Wave
-            const posArray = waveGeometry.attributes.position.array;
-            let idx = 0;
-            for (let ix = 0; ix < AMOUNTX; ix++) {
-                for (let iy = 0; iy < AMOUNTY; iy++) {
-                    posArray[idx + 1] = (Math.sin((ix + count) * 0.35) * 3.2) + (Math.sin((iy + count) * 0.45) * 3.2);
-                    idx += 3;
-                }
-            }
-            waveGeometry.attributes.position.needsUpdate = true;
-
-            // Slow ambient starfield rotation
-            ambientParticles.rotation.y = count * 0.015;
-            ambientParticles.rotation.x = Math.sin(count * 0.01) * 0.04;
-
-            renderer.render(scene, camera);
-        }
-        animate();
-
-        // Responsive Resize
-        window.addEventListener('resize', () => {
-            camera.aspect = container.clientWidth / container.clientHeight;
-            camera.updateProjectionMatrix();
-            renderer.setSize(container.clientWidth, container.clientHeight);
-        });
-    })();
-
-    // =========================================================================
-    // 2. GSAP ENTRANCE & MICRO-INTERACTION ANIMATIONS
+    // GSAP ENTRANCE & MICRO-INTERACTION ANIMATIONS
     // =========================================================================
     document.addEventListener('DOMContentLoaded', () => {
         // Hero Content Stagger
@@ -594,18 +434,11 @@
           .from('.upload-glass-card', { scale: 0.94, opacity: 0, duration: 0.9, ease: 'back.out(1.4)' }, '-=0.6')
           .from('.stats-strip .glass-panel', { y: 20, opacity: 0, duration: 0.5, stagger: 0.1 }, '-=0.4');
 
-        // Agent Cards Hover Physics & Scroll Reveal
-        gsap.from('.agent-card', {
-            scrollTrigger: {
-                trigger: '#agents-section',
-                start: 'top 80%',
-            },
-            y: 40,
-            opacity: 0,
-            duration: 0.7,
-            stagger: 0.12,
-            ease: 'power2.out'
-        });
+        // Ensure 5 Agent Cards are cleanly revealed and never stuck at 0 opacity
+        gsap.fromTo('.agent-card', 
+            { y: 35, opacity: 0 }, 
+            { y: 0, opacity: 1, duration: 0.6, stagger: 0.08, ease: 'power2.out', delay: 0.3 }
+        );
 
         // =====================================================================
         // 3. FILE SELECTION & DRAG-AND-DROP INTERACTION

@@ -1,0 +1,266 @@
+{% extends "redactor/base.html" %}
+
+{% block title %}My Profile — RedactAI{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+
+    <!-- Header -->
+    <div class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center gap-3 mb-4 profile-header">
+        <div class="d-flex align-items-center gap-3">
+            <div class="avatar-circle" style="width: 58px; height: 58px; font-size: 1.4rem;">
+                {{ profile.initials }}
+            </div>
+            <div>
+                <h3 class="fw-bold text-white mb-0">{{ profile.display_name }}</h3>
+                <div class="text-muted small">
+                    <span class="text-info">@{{ user.username }}</span>
+                    {% if profile.role %}&bull; {{ profile.role }}{% endif %}
+                    {% if profile.organization %}&bull; <span class="badge bg-secondary">{{ profile.organization }}</span>{% endif %}
+                </div>
+            </div>
+        </div>
+        <div class="d-flex gap-2">
+            <a href="{% url 'index' %}" class="btn btn-cyber-primary btn-sm">
+                <i class="bi bi-cloud-arrow-up-fill"></i> New Redaction Job
+            </a>
+            <button class="btn btn-cyber-secondary btn-sm" data-bs-toggle="modal" data-bs-target="#editProfileModal">
+                <i class="bi bi-pencil-square"></i> Edit Profile
+            </button>
+        </div>
+    </div>
+
+    <!-- Stats Row -->
+    <div class="row g-3 mb-4 stat-cards-row">
+        <div class="col-6 col-md-3">
+            <div class="glass-panel p-3 text-center h-100">
+                <div class="text-dim small text-uppercase fw-semibold mb-1">Total Jobs</div>
+                <div class="fs-2 fw-bold text-white counter-val">{{ stats.total_jobs }}</div>
+                <div class="small text-muted mt-1"><i class="bi bi-stack text-primary me-1"></i>Created by you</div>
+            </div>
+        </div>
+        <div class="col-6 col-md-3">
+            <div class="glass-panel p-3 text-center h-100">
+                <div class="text-dim small text-uppercase fw-semibold mb-1">Completed</div>
+                <div class="fs-2 fw-bold text-success counter-val">{{ stats.completed_jobs }}</div>
+                <div class="small text-muted mt-1"><i class="bi bi-check2-circle text-success me-1"></i>Successfully processed</div>
+            </div>
+        </div>
+        <div class="col-6 col-md-3">
+            <div class="glass-panel p-3 text-center h-100">
+                <div class="text-dim small text-uppercase fw-semibold mb-1">Total Files</div>
+                <div class="fs-2 fw-bold text-info counter-val">{{ stats.total_files }}</div>
+                <div class="small text-muted mt-1"><i class="bi bi-file-earmark-check text-info me-1"></i>DOCX &amp; PDFs</div>
+            </div>
+        </div>
+        <div class="col-6 col-md-3">
+            <div class="glass-panel p-3 text-center h-100">
+                <div class="text-dim small text-uppercase fw-semibold mb-1">Success Rate</div>
+                <div class="fs-2 fw-bold text-warning counter-val">{{ stats.success_rate }}%</div>
+                <div class="small text-muted mt-1"><i class="bi bi-pie-chart text-warning me-1"></i>Pipeline reliability</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row g-4">
+        <!-- User Personal Jobs List -->
+        <div class="col-lg-8">
+            <div class="glass-panel p-4 h-100">
+                <div class="d-flex justify-content-between align-items-center mb-3 pb-2 border-bottom border-secondary">
+                    <div>
+                        <h5 class="fw-bold text-white mb-0">
+                            <i class="bi bi-folder2-open text-primary me-2"></i>My Redaction Jobs
+                        </h5>
+                        <p class="text-muted small mb-0">Track documents you uploaded and download redacted files</p>
+                    </div>
+                    <span class="badge bg-primary rounded-pill">{{ user_jobs.count }} Jobs</span>
+                </div>
+
+                {% if user_jobs %}
+                <div class="table-responsive">
+                    <table class="table table-dark table-hover align-middle mb-0" style="background: transparent;">
+                        <thead>
+                            <tr class="text-muted small text-uppercase border-secondary">
+                                <th>Job ID</th>
+                                <th>Files</th>
+                                <th>Date</th>
+                                <th>Status</th>
+                                <th class="text-end">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for job in user_jobs %}
+                            <tr class="border-secondary">
+                                <td>
+                                    <span class="fw-semibold text-info">#{{ job.pk }}</span>
+                                </td>
+                                <td>
+                                    {% for f in job.files.all %}
+                                        <div class="small text-truncate" style="max-width: 220px;" title="{{ f.original_filename }}">
+                                            <i class="bi bi-file-earmark-word text-primary me-1"></i>{{ f.original_filename }}
+                                        </div>
+                                    {% empty %}
+                                        <span class="text-muted small">No files</span>
+                                    {% endfor %}
+                                </td>
+                                <td class="small text-muted">
+                                    {{ job.created_at|date:"M d, Y H:i" }}
+                                </td>
+                                <td>
+                                    <span class="badge badge-status-{{ job.status }} px-2 py-1">
+                                        {{ job.get_status_display }}
+                                    </span>
+                                </td>
+                                <td class="text-end">
+                                    <a href="{% url 'job_detail' job.pk %}" class="btn btn-sm btn-cyber-secondary py-1 px-2">
+                                        <i class="bi bi-eye"></i> View
+                                    </a>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                {% else %}
+                <div class="text-center py-5">
+                    <i class="bi bi-file-earmark-lock text-muted fs-1 mb-2 d-block"></i>
+                    <h6 class="text-white">No jobs created yet</h6>
+                    <p class="text-muted small">Upload your first legal document or resume to see it here.</p>
+                    <a href="{% url 'index' %}" class="btn btn-cyber-primary btn-sm mt-2">
+                        <i class="bi bi-cloud-arrow-up-fill me-1"></i> Start Redacting
+                    </a>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Profile Details & MongoDB Sync Card -->
+        <div class="col-lg-4">
+            <div class="glass-panel p-4 mb-4">
+                <h5 class="fw-bold text-white mb-3 pb-2 border-bottom border-secondary">
+                    <i class="bi bi-person-lines-fill text-info me-2"></i>Profile Details
+                </h5>
+                <ul class="list-unstyled small mb-0">
+                    <li class="d-flex justify-content-between py-2 border-bottom border-secondary">
+                        <span class="text-muted">Username</span>
+                        <span class="fw-semibold text-white">{{ user.username }}</span>
+                    </li>
+                    <li class="d-flex justify-content-between py-2 border-bottom border-secondary">
+                        <span class="text-muted">Email</span>
+                        <span class="fw-semibold text-white">{{ user.email }}</span>
+                    </li>
+                    <li class="d-flex justify-content-between py-2 border-bottom border-secondary">
+                        <span class="text-muted">Organization</span>
+                        <span class="fw-semibold text-white">{{ profile.organization|default:"Personal" }}</span>
+                    </li>
+                    <li class="d-flex justify-content-between py-2 border-bottom border-secondary">
+                        <span class="text-muted">Role</span>
+                        <span class="fw-semibold text-white">{{ profile.role|default:"User" }}</span>
+                    </li>
+                    <li class="d-flex justify-content-between py-2 border-bottom border-secondary">
+                        <span class="text-muted">Preferred Policy</span>
+                        <span class="badge bg-secondary">{{ profile.get_preferred_policy_display }}</span>
+                    </li>
+                    <li class="d-flex justify-content-between py-2">
+                        <span class="text-muted">Member Since</span>
+                        <span class="text-white">{{ user.date_joined|date:"M Y" }}</span>
+                    </li>
+                </ul>
+
+                {% if profile.bio %}
+                <div class="mt-3 pt-2 border-top border-secondary">
+                    <div class="text-muted small mb-1">Bio</div>
+                    <p class="small text-light mb-0">{{ profile.bio }}</p>
+                </div>
+                {% endif %}
+            </div>
+
+            <!-- MongoDB Sync Status Card -->
+            <div class="glass-panel p-4">
+                <div class="d-flex align-items-center gap-2 mb-2">
+                    <i class="bi bi-database-check text-success fs-4"></i>
+                    <div>
+                        <h6 class="fw-bold text-white mb-0">MongoDB Atlas Synced</h6>
+                        <span class="badge bg-success-subtle text-success small">Real-Time Mirroring</span>
+                    </div>
+                </div>
+                <p class="text-muted small mb-2">
+                    Your profile, personal document metadata, and redaction audit histories are synchronized with your MongoDB Atlas cluster.
+                </p>
+                <div class="p-2 rounded bg-black bg-opacity-50 font-monospace small text-dim" style="font-size: 0.75rem;">
+                    <div>Database: legal_redactor_db</div>
+                    <div>Collection: users &bull; jobs</div>
+                    <div>Doc ID: django_user_{{ user.id }}</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Edit Profile Modal -->
+<div class="modal fade" id="editProfileModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content glass-panel border-secondary text-white" style="background: rgba(15, 23, 42, 0.95); backdrop-filter: blur(20px);">
+            <div class="modal-header border-secondary">
+                <h5 class="modal-title fw-bold"><i class="bi bi-pencil-square me-2 text-primary"></i>Edit Profile</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <form method="post" action="{% url 'profile' %}">
+                {% csrf_token %}
+                <div class="modal-body">
+                    <div class="row g-3 mb-3">
+                        <div class="col-6">
+                            <label class="form-label small text-muted text-uppercase fw-semibold">First Name</label>
+                            <input type="text" name="first_name" value="{{ user.first_name }}" class="form-control bg-transparent text-white border-secondary">
+                        </div>
+                        <div class="col-6">
+                            <label class="form-label small text-muted text-uppercase fw-semibold">Last Name</label>
+                            <input type="text" name="last_name" value="{{ user.last_name }}" class="form-control bg-transparent text-white border-secondary">
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label small text-muted text-uppercase fw-semibold">Organization / Law Firm</label>
+                        <input type="text" name="organization" value="{{ profile.organization }}" class="form-control bg-transparent text-white border-secondary" placeholder="e.g. Legal Corp LLC">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label small text-muted text-uppercase fw-semibold">Role / Title</label>
+                        <input type="text" name="role" value="{{ profile.role }}" class="form-control bg-transparent text-white border-secondary" placeholder="e.g. Compliance Officer">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label small text-muted text-uppercase fw-semibold">Preferred Redaction Policy</label>
+                        <select name="preferred_policy" class="form-select bg-dark text-white border-secondary">
+                            <option value="AUTO" {% if profile.preferred_policy == 'AUTO' %}selected{% endif %}>Auto-Detect (Classifier Agent)</option>
+                            <option value="CV" {% if profile.preferred_policy == 'CV' %}selected{% endif %}>CV / Resume Policy</option>
+                            <option value="CONTRACT" {% if profile.preferred_policy == 'CONTRACT' %}selected{% endif %}>Legal Contract Policy</option>
+                            <option value="MEDICAL" {% if profile.preferred_policy == 'MEDICAL' %}selected{% endif %}>Medical Record Policy</option>
+                            <option value="COURT_FILING" {% if profile.preferred_policy == 'COURT_FILING' %}selected{% endif %}>Court Filing Policy</option>
+                            <option value="FINANCIAL" {% if profile.preferred_policy == 'FINANCIAL' %}selected{% endif %}>Financial Document Policy</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label small text-muted text-uppercase fw-semibold">Bio</label>
+                        <textarea name="bio" rows="2" class="form-control bg-transparent text-white border-secondary" placeholder="Tell us about your organization...">{{ profile.bio }}</textarea>
+                    </div>
+                </div>
+                <div class="modal-footer border-secondary">
+                    <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-cyber-primary btn-sm">Save &amp; Sync to MongoDB</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+    gsap.from(".profile-header", { y: -20, opacity: 0, duration: 0.6, ease: "power2.out" });
+    gsap.from(".stat-cards-row .glass-panel", {
+        y: 20,
+        opacity: 0,
+        duration: 0.6,
+        stagger: 0.1,
+        ease: "power2.out"
+    });
+</script>
+{% endblock %}

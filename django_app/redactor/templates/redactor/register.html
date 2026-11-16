@@ -1,0 +1,135 @@
+{% extends "redactor/base.html" %}
+
+{% block title %}Create Account — RedactAI{% endblock %}
+
+{% block content %}
+<div class="container py-5 my-auto">
+    <div class="row justify-content-center">
+        <div class="col-md-7 col-lg-6">
+            
+            <div class="text-center mb-4 register-header">
+                <div class="logo-icon mx-auto mb-3" style="width: 48px; height: 48px; font-size: 1.5rem;">
+                    <i class="bi bi-person-badge"></i>
+                </div>
+                <h3 class="fw-bold text-white">Create Your Profile</h3>
+                <p class="text-muted small">Access personal redaction history, custom policies, and MongoDB-synced audit logs</p>
+            </div>
+
+            {% if errors %}
+            <div class="alert alert-danger glass-panel py-2 mb-4" role="alert">
+                <ul class="mb-0 ps-3">
+                    {% for err in errors %}
+                        <li>{{ err }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+            {% endif %}
+
+            <div class="glass-panel p-4 p-md-5 auth-card shadow-2xl">
+                <form method="post" action="{% url 'register' %}">
+                    {% csrf_token %}
+                    
+                    <div class="row g-3 mb-3">
+                        <div class="col-md-6">
+                            <label class="form-label small text-muted text-uppercase fw-semibold">Username *</label>
+                            <input type="text"
+                                   name="username"
+                                   value="{{ form_data.username|default:'' }}"
+                                   required
+                                   class="form-control bg-transparent text-white border-secondary"
+                                   placeholder="e.g. raman_negi">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label small text-muted text-uppercase fw-semibold">Email Address *</label>
+                            <input type="email"
+                                   name="email"
+                                   value="{{ form_data.email|default:'' }}"
+                                   required
+                                   class="form-control bg-transparent text-white border-secondary"
+                                   placeholder="e.g. name@company.com">
+                        </div>
+                    </div>
+
+                    <div class="row g-3 mb-3">
+                        <div class="col-md-6">
+                            <label class="form-label small text-muted text-uppercase fw-semibold">First Name</label>
+                            <input type="text"
+                                   name="first_name"
+                                   value="{{ form_data.first_name|default:'' }}"
+                                   class="form-control bg-transparent text-white border-secondary"
+                                   placeholder="e.g. Raman">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label small text-muted text-uppercase fw-semibold">Last Name</label>
+                            <input type="text"
+                                   name="last_name"
+                                   value="{{ form_data.last_name|default:'' }}"
+                                   class="form-control bg-transparent text-white border-secondary"
+                                   placeholder="e.g. Negi">
+                        </div>
+                    </div>
+
+                    <div class="row g-3 mb-3">
+                        <div class="col-md-6">
+                            <label class="form-label small text-muted text-uppercase fw-semibold">Organization / Law Firm</label>
+                            <input type="text"
+                                   name="organization"
+                                   value="{{ form_data.organization|default:'' }}"
+                                   class="form-control bg-transparent text-white border-secondary"
+                                   placeholder="e.g. Apex Legal Corp">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label small text-muted text-uppercase fw-semibold">Role / Title</label>
+                            <input type="text"
+                                   name="role"
+                                   value="{{ form_data.role|default:'' }}"
+                                   class="form-control bg-transparent text-white border-secondary"
+                                   placeholder="e.g. Compliance Officer">
+                        </div>
+                    </div>
+
+                    <div class="row g-3 mb-4">
+                        <div class="col-md-6">
+                            <label class="form-label small text-muted text-uppercase fw-semibold">Password *</label>
+                            <input type="password"
+                                   name="password"
+                                   required
+                                   class="form-control bg-transparent text-white border-secondary"
+                                   placeholder="At least 6 characters">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label small text-muted text-uppercase fw-semibold">Confirm Password *</label>
+                            <input type="password"
+                                   name="password_confirm"
+                                   required
+                                   class="form-control bg-transparent text-white border-secondary"
+                                   placeholder="Repeat password">
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn btn-cyber-primary w-100 py-2 justify-content-center">
+                        <i class="bi bi-person-check-fill me-1"></i> Register Profile
+                    </button>
+                </form>
+
+                <div class="mt-4 pt-3 border-top border-secondary text-center small text-muted">
+                    Already have an account?
+                    <a href="{% url 'login' %}" class="text-info fw-semibold text-decoration-none ms-1">Sign in here</a>
+                </div>
+            </div>
+
+            <div class="text-center mt-3 text-dim small">
+                <i class="bi bi-shield-lock me-1"></i> Passwords are salted &amp; hashed. Profiles mirrored to MongoDB Atlas.
+            </div>
+
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+    gsap.from(".register-header", { y: -20, opacity: 0, duration: 0.6, ease: "power2.out" });
+    gsap.from(".auth-card", { scale: 0.95, opacity: 0, duration: 0.7, delay: 0.15, ease: "power3.out" });
+</script>
+{% endblock %}

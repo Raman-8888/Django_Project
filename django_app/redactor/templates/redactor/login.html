@@ -1,0 +1,81 @@
+{% extends "redactor/base.html" %}
+
+{% block title %}Sign In — RedactAI{% endblock %}
+
+{% block content %}
+<div class="container py-5 my-auto">
+    <div class="row justify-content-center">
+        <div class="col-md-5 col-lg-4">
+            
+            <div class="text-center mb-4 login-header">
+                <div class="logo-icon mx-auto mb-3" style="width: 48px; height: 48px; font-size: 1.5rem;">
+                    <i class="bi bi-shield-lock-fill"></i>
+                </div>
+                <h3 class="fw-bold text-white">Welcome Back</h3>
+                <p class="text-muted small">Sign in to track your personal document redaction jobs and profiles</p>
+            </div>
+
+            {% if error %}
+            <div class="alert alert-danger glass-panel py-2 mb-4" role="alert">
+                <i class="bi bi-exclamation-octagon-fill me-2"></i>{{ error }}
+            </div>
+            {% endif %}
+
+            <div class="glass-panel p-4 p-md-5 auth-card shadow-2xl">
+                <form method="post" action="{% url 'login' %}">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <label class="form-label small text-muted text-uppercase fw-semibold">Username or Email</label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-transparent border-secondary text-muted">
+                                <i class="bi bi-person"></i>
+                            </span>
+                            <input type="text"
+                                   name="username"
+                                   value="{{ username|default:'' }}"
+                                   required
+                                   class="form-control bg-transparent text-white border-secondary"
+                                   placeholder="e.g. alex or alex@firm.com">
+                        </div>
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="form-label small text-muted text-uppercase fw-semibold">Password</label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-transparent border-secondary text-muted">
+                                <i class="bi bi-key"></i>
+                            </span>
+                            <input type="password"
+                                   name="password"
+                                   required
+                                   class="form-control bg-transparent text-white border-secondary"
+                                   placeholder="••••••••">
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn btn-cyber-primary w-100 py-2 justify-content-center">
+                        <i class="bi bi-box-arrow-in-right me-1"></i> Sign In
+                    </button>
+                </form>
+
+                <div class="mt-4 pt-3 border-top border-secondary text-center small text-muted">
+                    Don't have an account yet?
+                    <a href="{% url 'register' %}" class="text-info fw-semibold text-decoration-none ms-1">Create one here</a>
+                </div>
+            </div>
+
+            <div class="text-center mt-3 text-dim small">
+                <i class="bi bi-database-lock me-1"></i> Profiles &amp; audit trails secured with MongoDB Atlas
+            </div>
+
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+    gsap.from(".login-header", { y: -20, opacity: 0, duration: 0.6, ease: "power2.out" });
+    gsap.from(".auth-card", { scale: 0.95, opacity: 0, duration: 0.7, delay: 0.15, ease: "power3.out" });
+</script>
+{% endblock %}

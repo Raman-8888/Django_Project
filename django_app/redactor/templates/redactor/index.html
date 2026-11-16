@@ -146,6 +146,113 @@
         color: var(--brand-cyan);
         border: 1px solid rgba(255, 255, 255, 0.1);
     }
+
+    /* Read Guide Button */
+    .btn-cyber-read {
+        background: rgba(99, 102, 241, 0.15);
+        border: 1px solid rgba(99, 102, 241, 0.4);
+        color: #e0e7ff;
+        font-size: 0.8rem;
+        font-weight: 600;
+        padding: 0.4rem 0.9rem;
+        border-radius: 9999px;
+        transition: all 0.25s ease;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.35rem;
+        text-decoration: none;
+    }
+    .btn-cyber-read:hover {
+        background: linear-gradient(135deg, var(--brand-primary), var(--brand-cyan));
+        color: #ffffff !important;
+        border-color: transparent;
+        box-shadow: 0 4px 15px rgba(99, 102, 241, 0.45);
+        transform: translateY(-2px);
+    }
+
+    /* Cyber Educational Modals */
+    .modal-cyber .modal-content {
+        background: rgba(11, 17, 32, 0.96);
+        backdrop-filter: blur(28px);
+        -webkit-backdrop-filter: blur(28px);
+        border: 1px solid rgba(255, 255, 255, 0.16);
+        border-top: 2px solid var(--brand-cyan);
+        border-radius: 1.5rem;
+        color: #f8fafc;
+        box-shadow: 0 30px 70px rgba(0, 0, 0, 0.9), 0 0 40px rgba(6, 182, 212, 0.25);
+    }
+    .modal-cyber .modal-header {
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        padding: 1.25rem 1.75rem;
+    }
+    .modal-cyber .modal-body {
+        padding: 1.75rem;
+        max-height: 75vh;
+        overflow-y: auto;
+    }
+    .modal-cyber .modal-footer {
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+        padding: 1rem 1.75rem;
+    }
+    .guide-section-box {
+        background: rgba(30, 41, 59, 0.5);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        border-radius: 1rem;
+        padding: 1.25rem;
+        margin-bottom: 1.25rem;
+    }
+    .resource-link-card {
+        background: rgba(30, 41, 59, 0.65);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 0.75rem;
+        padding: 0.85rem 1rem;
+        text-decoration: none;
+        color: #f8fafc;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        transition: all 0.25s ease;
+        margin-bottom: 0.65rem;
+    }
+    .resource-link-card:hover {
+        background: rgba(99, 102, 241, 0.2);
+        border-color: #818cf8;
+        color: #ffffff;
+        transform: translateX(4px);
+    }
+    .video-preview-card {
+        background: linear-gradient(135deg, rgba(239, 68, 68, 0.12), rgba(30, 41, 59, 0.7));
+        border: 1px solid rgba(239, 68, 68, 0.3);
+        border-radius: 0.85rem;
+        padding: 1rem;
+        text-decoration: none;
+        color: #f8fafc;
+        display: flex;
+        gap: 1rem;
+        align-items: center;
+        transition: all 0.25s ease;
+        margin-bottom: 0.65rem;
+    }
+    .video-preview-card:hover {
+        background: linear-gradient(135deg, rgba(239, 68, 68, 0.25), rgba(99, 102, 241, 0.25));
+        border-color: #f87171;
+        transform: translateY(-2px);
+        box-shadow: 0 8px 20px rgba(239, 68, 68, 0.25);
+        color: #ffffff;
+    }
+    .yt-icon-box {
+        width: 44px;
+        height: 44px;
+        background: rgba(239, 68, 68, 0.2);
+        border: 1px solid rgba(239, 68, 68, 0.4);
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #ef4444;
+        font-size: 1.4rem;
+        flex-shrink: 0;
+    }
 </style>
 {% endblock %}
 
@@ -332,89 +439,616 @@
     <div class="row g-4">
         <!-- Agent 1 -->
         <div class="col-md-6 col-lg-4">
-            <div class="agent-card h-100">
-                <div class="d-flex justify-content-between align-items-center mb-3">
-                    <div class="agent-num-badge">01</div>
-                    <span class="badge bg-primary-subtle text-primary border border-primary-subtle small">Classification</span>
+            <div class="agent-card h-100 d-flex flex-column justify-content-between">
+                <div>
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <div class="agent-num-badge">01</div>
+                        <span class="badge bg-primary-subtle text-primary border border-primary-subtle small">Classification</span>
+                    </div>
+                    <h5 class="fw-bold text-white mb-2">Classifier Agent</h5>
+                    <p class="text-muted small mb-3">
+                        Inspects document structure and domain (CV, Contract, Medical, Court Filing, Financial) to dynamically load the optimal redaction policy.
+                    </p>
                 </div>
-                <h5 class="fw-bold text-white mb-2">Classifier Agent</h5>
-                <p class="text-muted small mb-3">
-                    Inspects document structure and domain (CV, Contract, Medical, Court Filing, Financial) to dynamically load the optimal redaction policy.
-                </p>
-                <div class="font-monospace small text-cyan" style="color: var(--brand-cyan); font-size: 0.78rem;">
-                    <i class="bi bi-terminal me-1"></i>classifier.py
+                <div class="d-flex justify-content-between align-items-center mt-3 pt-3 border-top border-secondary border-opacity-25">
+                    <span class="font-monospace text-cyan" style="color: var(--brand-cyan); font-size: 0.78rem;">
+                        <i class="bi bi-terminal me-1"></i>classifier.py
+                    </span>
+                    <button type="button" class="btn-cyber-read" data-bs-toggle="modal" data-bs-target="#modalAgent1">
+                        <i class="bi bi-book-half"></i> Read Guide
+                    </button>
                 </div>
             </div>
         </div>
 
         <!-- Agent 2 -->
         <div class="col-md-6 col-lg-4">
-            <div class="agent-card h-100">
-                <div class="d-flex justify-content-between align-items-center mb-3">
-                    <div class="agent-num-badge">02</div>
-                    <span class="badge bg-info-subtle text-info border border-info-subtle small">Tri-Tier Detection</span>
+            <div class="agent-card h-100 d-flex flex-column justify-content-between">
+                <div>
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <div class="agent-num-badge">02</div>
+                        <span class="badge bg-info-subtle text-info border border-info-subtle small">Tri-Tier Detection</span>
+                    </div>
+                    <h5 class="fw-bold text-white mb-2">Hybrid PII Detector</h5>
+                    <p class="text-muted small mb-3">
+                        Combines deterministic regex (phones, emails, Aadhaar, PAN) with spaCy RoBERTa transformers and Gemini Flash contextual reasoning.
+                    </p>
                 </div>
-                <h5 class="fw-bold text-white mb-2">Hybrid PII Detector</h5>
-                <p class="text-muted small mb-3">
-                    Combines deterministic regex (phones, emails, Aadhaar, PAN) with spaCy RoBERTa transformers and Gemini Flash contextual reasoning.
-                </p>
-                <div class="font-monospace small text-cyan" style="color: var(--brand-cyan); font-size: 0.78rem;">
-                    <i class="bi bi-terminal me-1"></i>llm_detector.py
+                <div class="d-flex justify-content-between align-items-center mt-3 pt-3 border-top border-secondary border-opacity-25">
+                    <span class="font-monospace text-cyan" style="color: var(--brand-cyan); font-size: 0.78rem;">
+                        <i class="bi bi-terminal me-1"></i>llm_detector.py
+                    </span>
+                    <button type="button" class="btn-cyber-read" data-bs-toggle="modal" data-bs-target="#modalAgent2">
+                        <i class="bi bi-book-half"></i> Read Guide
+                    </button>
                 </div>
             </div>
         </div>
 
         <!-- Agent 3 -->
         <div class="col-md-6 col-lg-4">
-            <div class="agent-card h-100">
-                <div class="d-flex justify-content-between align-items-center mb-3">
-                    <div class="agent-num-badge">03</div>
-                    <span class="badge bg-warning-subtle text-warning border border-warning-subtle small">Context Filter</span>
+            <div class="agent-card h-100 d-flex flex-column justify-content-between">
+                <div>
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <div class="agent-num-badge">03</div>
+                        <span class="badge bg-warning-subtle text-warning border border-warning-subtle small">Context Filter</span>
+                    </div>
+                    <h5 class="fw-bold text-white mb-2">Verifier Agent</h5>
+                    <p class="text-muted small mb-3">
+                        Analyzes &plusmn;100 characters of surrounding context to eliminate false positives (e.g. &ldquo;Apple&rdquo; fruit vs company) and scores confidence.
+                    </p>
                 </div>
-                <h5 class="fw-bold text-white mb-2">Verifier Agent</h5>
-                <p class="text-muted small mb-3">
-                    Analyzes &plusmn;100 characters of surrounding context to eliminate false positives (e.g. &ldquo;Apple&rdquo; fruit vs company) and scores confidence.
-                </p>
-                <div class="font-monospace small text-cyan" style="color: var(--brand-cyan); font-size: 0.78rem;">
-                    <i class="bi bi-terminal me-1"></i>verifier.py
+                <div class="d-flex justify-content-between align-items-center mt-3 pt-3 border-top border-secondary border-opacity-25">
+                    <span class="font-monospace text-cyan" style="color: var(--brand-cyan); font-size: 0.78rem;">
+                        <i class="bi bi-terminal me-1"></i>verifier.py
+                    </span>
+                    <button type="button" class="btn-cyber-read" data-bs-toggle="modal" data-bs-target="#modalAgent3">
+                        <i class="bi bi-book-half"></i> Read Guide
+                    </button>
                 </div>
             </div>
         </div>
 
         <!-- Agent 4 -->
         <div class="col-md-6 col-lg-6">
-            <div class="agent-card h-100">
-                <div class="d-flex justify-content-between align-items-center mb-3">
-                    <div class="agent-num-badge">04</div>
-                    <span class="badge bg-success-subtle text-success border border-success-subtle small">In-Place OpenXML</span>
+            <div class="agent-card h-100 d-flex flex-column justify-content-between">
+                <div>
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <div class="agent-num-badge">04</div>
+                        <span class="badge bg-success-subtle text-success border border-success-subtle small">In-Place OpenXML</span>
+                    </div>
+                    <h5 class="fw-bold text-white mb-2">Structure-Preserving Redactor Engine</h5>
+                    <p class="text-muted small mb-3">
+                        Traverses OpenXML paragraphs and table cells, splices text runs, and clones exact <code>&lt;w:rPr&gt;</code> styling blocks without touching margins, tables, or logos.
+                    </p>
                 </div>
-                <h5 class="fw-bold text-white mb-2">Structure-Preserving Redactor Engine</h5>
-                <p class="text-muted small mb-3">
-                    Traverses OpenXML paragraphs and table cells, splices text runs, and clones exact <code>&lt;w:rPr&gt;</code> styling blocks without touching margins, tables, or logos.
-                </p>
-                <div class="font-monospace small text-cyan" style="color: var(--brand-cyan); font-size: 0.78rem;">
-                    <i class="bi bi-terminal me-1"></i>spacy_redaction.py
+                <div class="d-flex justify-content-between align-items-center mt-3 pt-3 border-top border-secondary border-opacity-25">
+                    <span class="font-monospace text-cyan" style="color: var(--brand-cyan); font-size: 0.78rem;">
+                        <i class="bi bi-terminal me-1"></i>spacy_redaction.py
+                    </span>
+                    <button type="button" class="btn-cyber-read" data-bs-toggle="modal" data-bs-target="#modalAgent4">
+                        <i class="bi bi-book-half"></i> Read Guide
+                    </button>
                 </div>
             </div>
         </div>
 
         <!-- Agent 5 -->
         <div class="col-md-12 col-lg-6">
-            <div class="agent-card h-100">
-                <div class="d-flex justify-content-between align-items-center mb-3">
-                    <div class="agent-num-badge">05</div>
-                    <span class="badge bg-danger-subtle text-danger border border-danger-subtle small">Audit &amp; QA</span>
+            <div class="agent-card h-100 d-flex flex-column justify-content-between">
+                <div>
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <div class="agent-num-badge">05</div>
+                        <span class="badge bg-danger-subtle text-danger border border-danger-subtle small">Audit &amp; QA</span>
+                    </div>
+                    <h5 class="fw-bold text-white mb-2">Adversarial QA Agent</h5>
+                    <p class="text-muted small mb-3">
+                        Performs an independent black-box scan on the final redacted document to verify zero surviving PII and computes a compliance scorecard (0-100).
+                    </p>
                 </div>
-                <h5 class="fw-bold text-white mb-2">Adversarial QA Agent</h5>
-                <p class="text-muted small mb-3">
-                    Performs an independent black-box scan on the final redacted document to verify zero surviving PII and computes a compliance scorecard (0-100).
-                </p>
-                <div class="font-monospace small text-cyan" style="color: var(--brand-cyan); font-size: 0.78rem;">
-                    <i class="bi bi-terminal me-1"></i>qa_agent.py
+                <div class="d-flex justify-content-between align-items-center mt-3 pt-3 border-top border-secondary border-opacity-25">
+                    <span class="font-monospace text-cyan" style="color: var(--brand-cyan); font-size: 0.78rem;">
+                        <i class="bi bi-terminal me-1"></i>qa_agent.py
+                    </span>
+                    <button type="button" class="btn-cyber-read" data-bs-toggle="modal" data-bs-target="#modalAgent5">
+                        <i class="bi bi-book-half"></i> Read Guide
+                    </button>
                 </div>
             </div>
         </div>
     </div>
+</div>
+
+<!-- ========================================================================= -->
+<!-- EDUCATIONAL DEEP-DIVE MODALS FOR ALL 5 AGENTS -->
+<!-- ========================================================================= -->
+
+<!-- Modal 1: Classifier Agent -->
+<div class="modal fade modal-cyber" id="modalAgent1" tabindex="-1" aria-labelledby="modalAgent1Label" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="d-flex align-items-center gap-3">
+                    <div class="agent-num-badge">01</div>
+                    <div>
+                        <h5 class="modal-title fw-bold text-white mb-0" id="modalAgent1Label">Classifier Agent</h5>
+                        <div class="text-muted small">Domain Taxonomy &amp; Adaptive Policy Routing</div>
+                    </div>
+                </div>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <!-- ELI5 Explanation -->
+                <div class="guide-section-box">
+                    <h6 class="text-cyan fw-bold mb-2">
+                        <i class="bi bi-lightbulb-fill text-warning me-2"></i>In Simplest Words (ELI5)
+                    </h6>
+                    <p class="small text-light mb-2">
+                        Imagine walking into a hospital. The triage nurse doesn't perform surgery immediately—they first check what's wrong with you to send you to the right specialist!
+                    </p>
+                    <p class="small text-light mb-0">
+                        Similarly, the <strong>Classifier Agent</strong> reads the opening paragraphs of your uploaded document to determine: <em>"What kind of document is this?"</em>
+                        Is it a <strong>Resume/CV</strong>? A <strong>Medical Record</strong>? A <strong>Court Filing</strong>? Or a <strong>Commercial Contract</strong>?
+                        Different documents have completely different privacy rules! For instance, in a CV, your previous company name is public, but your personal phone number is private. In a hospital record, a doctor's diagnosis must be masked under HIPAA. The Classifier ensures the right rules are selected from second one.
+                    </p>
+                </div>
+
+                <!-- Technical Under the Hood -->
+                <div class="guide-section-box">
+                    <h6 class="text-white fw-bold mb-2">
+                        <i class="bi bi-cpu-fill text-primary me-2"></i>Under The Hood (Technical Architecture)
+                    </h6>
+                    <ul class="small text-muted mb-0 ps-3">
+                        <li class="mb-1"><strong class="text-light">Fast Window Slicing:</strong> Reads the first 1,500 characters of the document where titles, headers, and domain indicators reside.</li>
+                        <li class="mb-1"><strong class="text-light">Structured LLM Inference:</strong> Queries Google Gemini 3.8 Flash with low temperature (0.1) for deterministic JSON classification.</li>
+                        <li class="mb-1"><strong class="text-light">Domain Mapping:</strong> Resolves into 6 canonical categories: <code>CV</code>, <code>CONTRACT</code>, <code>MEDICAL</code>, <code>COURT_FILING</code>, <code>FINANCIAL</code>, or <code>OTHER</code>.</li>
+                        <li><strong class="text-light">Dynamic Policy Injection:</strong> Hands off domain-specific redaction guidelines from <code>agents/policies.py</code> to downstream detectors.</li>
+                    </ul>
+                </div>
+
+                <!-- Web Sources -->
+                <div class="mb-3">
+                    <h6 class="text-white fw-bold mb-2">
+                        <i class="bi bi-globe2 text-info me-2"></i>Curated Internet Sources &amp; Documentation
+                    </h6>
+                    <a href="https://cloud.google.com/document-ai/docs/overview" target="_blank" rel="noopener noreferrer" class="resource-link-card">
+                        <div>
+                            <div class="fw-semibold small text-white">Google Cloud Document AI Guide</div>
+                            <div class="text-muted" style="font-size: 0.75rem;">Enterprise architectures for classifying unstructured legal &amp; business documents.</div>
+                        </div>
+                        <i class="bi bi-box-arrow-up-right text-cyan"></i>
+                    </a>
+                    <a href="https://gdpr-info.eu/art-9-gdpr/" target="_blank" rel="noopener noreferrer" class="resource-link-card">
+                        <div>
+                            <div class="fw-semibold small text-white">GDPR Article 9: Special Category Data Processing</div>
+                            <div class="text-muted" style="font-size: 0.75rem;">Why medical, financial, and employment records require segregated redaction policies.</div>
+                        </div>
+                        <i class="bi bi-box-arrow-up-right text-cyan"></i>
+                    </a>
+                </div>
+
+                <!-- YouTube Tutorials -->
+                <div>
+                    <h6 class="text-white fw-bold mb-2">
+                        <i class="bi bi-youtube text-danger me-2"></i>Recommended YouTube Tutorials
+                    </h6>
+                    <a href="https://www.youtube.com/results?search_query=document+classification+nlp+transformers+tutorial" target="_blank" rel="noopener noreferrer" class="video-preview-card">
+                        <div class="yt-icon-box">
+                            <i class="bi bi-play-circle-fill"></i>
+                        </div>
+                        <div class="flex-grow-1">
+                            <div class="fw-semibold small text-white">Document Classification with AI &amp; NLP Explained</div>
+                            <div class="text-muted" style="font-size: 0.75rem;">Watch how modern AI classifies document types and extracts structured intent.</div>
+                        </div>
+                        <i class="bi bi-box-arrow-up-right text-danger"></i>
+                    </a>
+                    <a href="https://www.youtube.com/results?search_query=prompt+engineering+structured+json+outputs+gemini" target="_blank" rel="noopener noreferrer" class="video-preview-card">
+                        <div class="yt-icon-box">
+                            <i class="bi bi-play-circle-fill"></i>
+                        </div>
+                        <div class="flex-grow-1">
+                            <div class="fw-semibold small text-white">Prompt Engineering for Structured JSON Classification</div>
+                            <div class="text-muted" style="font-size: 0.75rem;">Learn how LLMs output schema-strict JSON taxonomy categories without hallucinating.</div>
+                        </div>
+                        <i class="bi bi-box-arrow-up-right text-danger"></i>
+                    </a>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary btn-sm rounded-pill px-4" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal 2: Hybrid PII Detector -->
+<div class="modal fade modal-cyber" id="modalAgent2" tabindex="-1" aria-labelledby="modalAgent2Label" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="d-flex align-items-center gap-3">
+                    <div class="agent-num-badge">02</div>
+                    <div>
+                        <h5 class="modal-title fw-bold text-white mb-0" id="modalAgent2Label">Hybrid Tri-Tier PII Detector</h5>
+                        <div class="text-muted small">Regex + spaCy Transformers + Gemini Flash Synergy</div>
+                    </div>
+                </div>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <!-- ELI5 Explanation -->
+                <div class="guide-section-box">
+                    <h6 class="text-cyan fw-bold mb-2">
+                        <i class="bi bi-lightbulb-fill text-warning me-2"></i>In Simplest Words (ELI5)
+                    </h6>
+                    <p class="small text-light mb-2">
+                        Why use three different technologies instead of just asking an AI? Because relying on one tool leaves massive blind spots!
+                    </p>
+                    <p class="small text-light mb-0">
+                        Think of catching fish in the ocean:
+                        <br>&bull; <strong>Tier 1 (Regex):</strong> High-speed radar. It catches rigid patterns like 10-digit phone numbers, emails, Aadhaar cards, and PAN numbers in 3 milliseconds with 100% mathematical precision.
+                        <br>&bull; <strong>Tier 2 (spaCy NLP):</strong> A grammar brain. It understands sentence syntax to spot names of people, universities, and cities, even if they aren't in any predefined dictionary.
+                        <br>&bull; <strong>Tier 3 (Gemini 3.8 Flash):</strong> A human-level reader. It catches subtle, unstructured secrets like <em>"my spouse Ananya's private phone"</em> or <em>"admitted to Room 304 under Dr. Mehta"</em> that rules completely overlook!
+                    </p>
+                </div>
+
+                <!-- Technical Under the Hood -->
+                <div class="guide-section-box">
+                    <h6 class="text-white fw-bold mb-2">
+                        <i class="bi bi-cpu-fill text-primary me-2"></i>Under The Hood (Technical Architecture)
+                    </h6>
+                    <ul class="small text-muted mb-0 ps-3">
+                        <li class="mb-1"><strong class="text-light">Deterministic Patterns:</strong> Compiled Python <code>re.VERBOSE</code> expressions matching PAN (<code>[A-Z]{5}[0-9]{4}[A-Z]</code>), Aadhaar (<code>\d{4}\s\d{4}\s\d{4}</code>), emails, phone numbers, and SSNs.</li>
+                        <li class="mb-1"><strong class="text-light">spaCy Transformer Engine:</strong> Named Entity Recognition (NER) labeling <code>PERSON</code>, <code>ORG</code>, <code>GPE</code>, and <code>DATE</code> tokens.</li>
+                        <li class="mb-1"><strong class="text-light">Gemini Flash LLM:</strong> Contextual reasoning pass returning exact character span coordinates <code>[start, end, text, entity_type]</code>.</li>
+                        <li><strong class="text-light">Span Merge Resolver:</strong> Merges overlapping candidate intervals, resolving conflicting boundaries without creating fragmented redactions.</li>
+                    </ul>
+                </div>
+
+                <!-- Web Sources -->
+                <div class="mb-3">
+                    <h6 class="text-white fw-bold mb-2">
+                        <i class="bi bi-globe2 text-info me-2"></i>Curated Internet Sources &amp; Documentation
+                    </h6>
+                    <a href="https://spacy.io/usage/linguistic-features#named-entities" target="_blank" rel="noopener noreferrer" class="resource-link-card">
+                        <div>
+                            <div class="fw-semibold small text-white">spaCy Official Docs: Named Entity Recognition (NER)</div>
+                            <div class="text-muted" style="font-size: 0.75rem;">How industrial NLP models identify entities in text streams.</div>
+                        </div>
+                        <i class="bi bi-box-arrow-up-right text-cyan"></i>
+                    </a>
+                    <a href="https://cheatsheetseries.owasp.org/cheatsheets/Personally_Identifiable_Information_Handling_Cheat_Sheet.html" target="_blank" rel="noopener noreferrer" class="resource-link-card">
+                        <div>
+                            <div class="fw-semibold small text-white">OWASP PII Handling &amp; Sanitization Cheat Sheet</div>
+                            <div class="text-muted" style="font-size: 0.75rem;">Global cybersecurity guidelines for identifying and isolating PII.</div>
+                        </div>
+                        <i class="bi bi-box-arrow-up-right text-cyan"></i>
+                    </a>
+                </div>
+
+                <!-- YouTube Tutorials -->
+                <div>
+                    <h6 class="text-white fw-bold mb-2">
+                        <i class="bi bi-youtube text-danger me-2"></i>Recommended YouTube Tutorials
+                    </h6>
+                    <a href="https://www.youtube.com/results?search_query=named+entity+recognition+spacy+python+tutorial" target="_blank" rel="noopener noreferrer" class="video-preview-card">
+                        <div class="yt-icon-box">
+                            <i class="bi bi-play-circle-fill"></i>
+                        </div>
+                        <div class="flex-grow-1">
+                            <div class="fw-semibold small text-white">Named Entity Recognition (NER) in Python with spaCy</div>
+                            <div class="text-muted" style="font-size: 0.75rem;">Understand how transformers parse entities and linguistic tokens.</div>
+                        </div>
+                        <i class="bi bi-box-arrow-up-right text-danger"></i>
+                    </a>
+                    <a href="https://www.youtube.com/results?search_query=regular+expressions+regex+in+100+seconds" target="_blank" rel="noopener noreferrer" class="video-preview-card">
+                        <div class="yt-icon-box">
+                            <i class="bi bi-play-circle-fill"></i>
+                        </div>
+                        <div class="flex-grow-1">
+                            <div class="fw-semibold small text-white">Regex in 100 Seconds + Pattern Matching Guide</div>
+                            <div class="text-muted" style="font-size: 0.75rem;">The mathematical foundations of regular expression pattern scanning.</div>
+                        </div>
+                        <i class="bi bi-box-arrow-up-right text-danger"></i>
+                    </a>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary btn-sm rounded-pill px-4" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal 3: Verifier Agent -->
+<div class="modal fade modal-cyber" id="modalAgent3" tabindex="-1" aria-labelledby="modalAgent3Label" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="d-flex align-items-center gap-3">
+                    <div class="agent-num-badge">03</div>
+                    <div>
+                        <h5 class="modal-title fw-bold text-white mb-0" id="modalAgent3Label">Context-Aware Verifier Agent</h5>
+                        <div class="text-muted small">False-Positive Elimination &amp; Confidence Windowing</div>
+                    </div>
+                </div>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <!-- ELI5 Explanation -->
+                <div class="guide-section-box">
+                    <h6 class="text-cyan fw-bold mb-2">
+                        <i class="bi bi-lightbulb-fill text-warning me-2"></i>In Simplest Words (ELI5)
+                    </h6>
+                    <p class="small text-light mb-2">
+                        Have you ever seen an AI make a silly mistake—like redacting the word "Apple" in <em>"an apple a day keeps the doctor away"</em>, thinking Apple is a confidential company? Or redacting "Lincoln" in <em>"Lincoln Highway"</em> thinking it's a person's private name?
+                    </p>
+                    <p class="small text-light mb-0">
+                        This is called a <strong>False Positive</strong>, and it ruins your document!
+                        The <strong>Verifier Agent</strong> acts as a senior editor. For every single flagged word, it looks at the <strong>100 characters before and after it</strong>. It asks: <em>"In this specific sentence, is this genuinely private personal information that must be hidden, or is it harmless public vocabulary?"</em> If it's a false alarm, it discards it, keeping your document readable!
+                    </p>
+                </div>
+
+                <!-- Technical Under the Hood -->
+                <div class="guide-section-box">
+                    <h6 class="text-white fw-bold mb-2">
+                        <i class="bi bi-cpu-fill text-primary me-2"></i>Under The Hood (Technical Architecture)
+                    </h6>
+                    <ul class="small text-muted mb-0 ps-3">
+                        <li class="mb-1"><strong class="text-light">Symmetric Window Slicing:</strong> Extracts <code>text[max(0, start - 100) : min(len(text), end + 100)]</code> around candidate spans.</li>
+                        <li class="mb-1"><strong class="text-light">Semantic Role Evaluation:</strong> Prompts Gemini 3.8 Flash to evaluate grammatical role, public vs private entity status, and semantic intent.</li>
+                        <li class="mb-1"><strong class="text-light">Confidence Scoring:</strong> Computes a confidence metric (0.0 to 1.0) and rationale.</li>
+                        <li><strong class="text-light">Threshold Filtering:</strong> Candidates scoring below 0.70 confidence or flagged as public non-PII terms are discarded immediately.</li>
+                    </ul>
+                </div>
+
+                <!-- Web Sources -->
+                <div class="mb-3">
+                    <h6 class="text-white fw-bold mb-2">
+                        <i class="bi bi-globe2 text-info me-2"></i>Curated Internet Sources &amp; Documentation
+                    </h6>
+                    <a href="https://csrc.nist.gov/publications/detail/sp/800-53/rev-5/final" target="_blank" rel="noopener noreferrer" class="resource-link-card">
+                        <div>
+                            <div class="fw-semibold small text-white">NIST SP 800-53: Privacy Controls &amp; Data Minimization</div>
+                            <div class="text-muted" style="font-size: 0.75rem;">Official standards on minimizing over-redaction and false positives in compliance workflows.</div>
+                        </div>
+                        <i class="bi bi-box-arrow-up-right text-cyan"></i>
+                    </a>
+                    <a href="https://nlp.stanford.edu/projects/social-nlp/" target="_blank" rel="noopener noreferrer" class="resource-link-card">
+                        <div>
+                            <div class="fw-semibold small text-white">Stanford NLP: Contextual Disambiguation in Language Models</div>
+                            <div class="text-muted" style="font-size: 0.75rem;">Academic research on how context windows resolve ambiguous terms.</div>
+                        </div>
+                        <i class="bi bi-box-arrow-up-right text-cyan"></i>
+                    </a>
+                </div>
+
+                <!-- YouTube Tutorials -->
+                <div>
+                    <h6 class="text-white fw-bold mb-2">
+                        <i class="bi bi-youtube text-danger me-2"></i>Recommended YouTube Tutorials
+                    </h6>
+                    <a href="https://www.youtube.com/results?search_query=multi+agent+llm+evaluator+critic+pattern" target="_blank" rel="noopener noreferrer" class="video-preview-card">
+                        <div class="yt-icon-box">
+                            <i class="bi bi-play-circle-fill"></i>
+                        </div>
+                        <div class="flex-grow-1">
+                            <div class="fw-semibold small text-white">Multi-Agent Critic &amp; Verifier Patterns Explained</div>
+                            <div class="text-muted" style="font-size: 0.75rem;">See how autonomous critic agents eliminate hallucinations and errors in AI teams.</div>
+                        </div>
+                        <i class="bi bi-box-arrow-up-right text-danger"></i>
+                    </a>
+                    <a href="https://www.youtube.com/results?search_query=word+sense+disambiguation+nlp+explained" target="_blank" rel="noopener noreferrer" class="video-preview-card">
+                        <div class="yt-icon-box">
+                            <i class="bi bi-play-circle-fill"></i>
+                        </div>
+                        <div class="flex-grow-1">
+                            <div class="fw-semibold small text-white">Word Sense Disambiguation &amp; Context in NLP</div>
+                            <div class="text-muted" style="font-size: 0.75rem;">Understand how computers distinguish between homonyms based on surrounding words.</div>
+                        </div>
+                        <i class="bi bi-box-arrow-up-right text-danger"></i>
+                    </a>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary btn-sm rounded-pill px-4" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal 4: Structure-Preserving Redactor Engine -->
+<div class="modal fade modal-cyber" id="modalAgent4" tabindex="-1" aria-labelledby="modalAgent4Label" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="d-flex align-items-center gap-3">
+                    <div class="agent-num-badge">04</div>
+                    <div>
+                        <h5 class="modal-title fw-bold text-white mb-0" id="modalAgent4Label">Structure-Preserving Redactor Engine</h5>
+                        <div class="text-muted small">In-Place OpenXML Run Splicing &amp; Style Inheritance</div>
+                    </div>
+                </div>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <!-- ELI5 Explanation -->
+                <div class="guide-section-box">
+                    <h6 class="text-cyan fw-bold mb-2">
+                        <i class="bi bi-lightbulb-fill text-warning me-2"></i>In Simplest Words (ELI5)
+                    </h6>
+                    <p class="small text-light mb-2">
+                        When you give a Word document (`.docx`) to most standard software, they do something awful: they dump all the text into plain text, redact the words, and create a brand new blank document.
+                    </p>
+                    <p class="small text-light mb-0">
+                        The result? Your tables collapse, headers and corporate logos disappear, margins get messed up, and your professional typography is completely destroyed!
+                        Our <strong>Redactor Engine</strong> performs <em>keyhole surgery</em>. A Word file is actually a zipped package of XML files. This agent opens the internal anatomy of the document, walks into each paragraph and table cell, cuts out only the sensitive word, replaces it with <code>[REDACTED_NAME]</code>, and clones the exact font, size, bold/italic properties, and table borders without touching anything else!
+                    </p>
+                </div>
+
+                <!-- Technical Under the Hood -->
+                <div class="guide-section-box">
+                    <h6 class="text-white fw-bold mb-2">
+                        <i class="bi bi-cpu-fill text-primary me-2"></i>Under The Hood (Technical Architecture)
+                    </h6>
+                    <ul class="small text-muted mb-0 ps-3">
+                        <li class="mb-1"><strong class="text-light">OpenXML Tree Navigation:</strong> Parses WordprocessingML nodes using <code>python-docx</code> and <code>lxml</code> (traversing <code>&lt;w:p&gt;</code>, <code>&lt;w:r&gt;</code>, <code>&lt;w:t&gt;</code>).</li>
+                        <li class="mb-1"><strong class="text-light">Run Property Deep Cloning:</strong> Clones the <code>&lt;w:rPr&gt;</code> XML node (font family, font size, bold, italic, color, kerning, underline) so the replacement mask matches the native design.</li>
+                        <li class="mb-1"><strong class="text-light">Multi-Run Span Splicing:</strong> Handles entities split across multiple runs by stitching text boundaries and replacing intermediate tokens.</li>
+                        <li><strong class="text-light">Nested Scope Traversal:</strong> Recursively processes headers, footers, body paragraphs, and nested table grid cells.</li>
+                    </ul>
+                </div>
+
+                <!-- Web Sources -->
+                <div class="mb-3">
+                    <h6 class="text-white fw-bold mb-2">
+                        <i class="bi bi-globe2 text-info me-2"></i>Curated Internet Sources &amp; Documentation
+                    </h6>
+                    <a href="https://learn.microsoft.com/en-us/office/openxml/word/structure-of-a-wordprocessingml-document" target="_blank" rel="noopener noreferrer" class="resource-link-card">
+                        <div>
+                            <div class="fw-semibold small text-white">Microsoft Learn: Structure of a WordprocessingML Document</div>
+                            <div class="text-muted" style="font-size: 0.75rem;">Official Microsoft documentation on Word runs, paragraphs, and styles.</div>
+                        </div>
+                        <i class="bi bi-box-arrow-up-right text-cyan"></i>
+                    </a>
+                    <a href="https://python-docx.readthedocs.io/en/latest/user/text.html" target="_blank" rel="noopener noreferrer" class="resource-link-card">
+                        <div>
+                            <div class="fw-semibold small text-white">python-docx Documentation: Working with Text &amp; Runs</div>
+                            <div class="text-muted" style="font-size: 0.75rem;">How python-docx manipulates formatting blocks inside Word documents.</div>
+                        </div>
+                        <i class="bi bi-box-arrow-up-right text-cyan"></i>
+                    </a>
+                </div>
+
+                <!-- YouTube Tutorials -->
+                <div>
+                    <h6 class="text-white fw-bold mb-2">
+                        <i class="bi bi-youtube text-danger me-2"></i>Recommended YouTube Tutorials
+                    </h6>
+                    <a href="https://www.youtube.com/results?search_query=inside+docx+file+zip+xml+explained" target="_blank" rel="noopener noreferrer" class="video-preview-card">
+                        <div class="yt-icon-box">
+                            <i class="bi bi-play-circle-fill"></i>
+                        </div>
+                        <div class="flex-grow-1">
+                            <div class="fw-semibold small text-white">Inside a .docx File - It's Just a ZIP of XML!</div>
+                            <div class="text-muted" style="font-size: 0.75rem;">Visual dissection showing how Microsoft Word files store formatting in XML.</div>
+                        </div>
+                        <i class="bi bi-box-arrow-up-right text-danger"></i>
+                    </a>
+                    <a href="https://www.youtube.com/results?search_query=python+docx+formatting+runs+paragraphs+tutorial" target="_blank" rel="noopener noreferrer" class="video-preview-card">
+                        <div class="yt-icon-box">
+                            <i class="bi bi-play-circle-fill"></i>
+                        </div>
+                        <div class="flex-grow-1">
+                            <div class="fw-semibold small text-white">Python python-docx Crash Course: Formatting &amp; Styles</div>
+                            <div class="text-muted" style="font-size: 0.75rem;">Hands-on tutorial for manipulating runs and styles in Python.</div>
+                        </div>
+                        <i class="bi bi-box-arrow-up-right text-danger"></i>
+                    </a>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary btn-sm rounded-pill px-4" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal 5: Adversarial QA Agent -->
+<div class="modal fade modal-cyber" id="modalAgent5" tabindex="-1" aria-labelledby="modalAgent5Label" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="d-flex align-items-center gap-3">
+                    <div class="agent-num-badge">05</div>
+                    <div>
+                        <h5 class="modal-title fw-bold text-white mb-0" id="modalAgent5Label">Adversarial QA Agent</h5>
+                        <div class="text-muted small">Zero-Knowledge Red Teaming &amp; Compliance Audit Scorecard</div>
+                    </div>
+                </div>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <!-- ELI5 Explanation -->
+                <div class="guide-section-box">
+                    <h6 class="text-cyan fw-bold mb-2">
+                        <i class="bi bi-lightbulb-fill text-warning me-2"></i>In Simplest Words (ELI5)
+                    </h6>
+                    <p class="small text-light mb-2">
+                        In an airport, the pilot doesn't do their own security check—an independent inspector does!
+                    </p>
+                    <p class="small text-light mb-0">
+                        The <strong>Adversarial QA Agent</strong> acts like an independent cybersecurity auditor or white-hat hacker. It is given the final redacted document with <strong>zero prior knowledge</strong> of what earlier agents did. It performs an exhaustive scan looking for any leaked phone numbers, forgotten initials, or overlooked home addresses that slipped through the cracks. It calculates a compliance score (0-100) and certifies that the document is truly safe for public distribution!
+                    </p>
+                </div>
+
+                <!-- Technical Under the Hood -->
+                <div class="guide-section-box">
+                    <h6 class="text-white fw-bold mb-2">
+                        <i class="bi bi-cpu-fill text-primary me-2"></i>Under The Hood (Technical Architecture)
+                    </h6>
+                    <ul class="small text-muted mb-0 ps-3">
+                        <li class="mb-1"><strong class="text-light">Black-Box Audit:</strong> Receives only the post-redaction text stream without accessing the detector's intermediate state or cache.</li>
+                        <li class="mb-1"><strong class="text-light">Adversarial Prompting:</strong> Instructs Gemini 3.8 Flash to hunt for partial leaks, obfuscated phone numbers (e.g. spelled out digits), and dangling personal identifiers.</li>
+                        <li class="mb-1"><strong class="text-light">Compliance Metric Calculation:</strong> Computes <code>compliance_score</code> (0-100), counts surviving risks, and assigns a verdict: <code>approved</code>, <code>flagged_for_review</code>, or <code>rejected</code>.</li>
+                        <li><strong class="text-light">Audit Trail Persistence:</strong> Synchronizes the full audit report with timestamp and scorecard into MongoDB Atlas for enterprise regulatory verification.</li>
+                    </ul>
+                </div>
+
+                <!-- Web Sources -->
+                <div class="mb-3">
+                    <h6 class="text-white fw-bold mb-2">
+                        <i class="bi bi-globe2 text-info me-2"></i>Curated Internet Sources &amp; Documentation
+                    </h6>
+                    <a href="https://owasp.org/www-project-top-10-for-large-language-model-applications/" target="_blank" rel="noopener noreferrer" class="resource-link-card">
+                        <div>
+                            <div class="fw-semibold small text-white">OWASP Top 10 for LLM Applications: Adversarial Testing</div>
+                            <div class="text-muted" style="font-size: 0.75rem;">Industry standards for red-teaming and validating AI model output integrity.</div>
+                        </div>
+                        <i class="bi bi-box-arrow-up-right text-cyan"></i>
+                    </a>
+                    <a href="https://gdpr-info.eu/art-32-gdpr/" target="_blank" rel="noopener noreferrer" class="resource-link-card">
+                        <div>
+                            <div class="fw-semibold small text-white">GDPR Article 32: Security of Processing &amp; Verification</div>
+                            <div class="text-muted" style="font-size: 0.75rem;">Regulatory requirements for technical testing and evaluating automated data protection.</div>
+                        </div>
+                        <i class="bi bi-box-arrow-up-right text-cyan"></i>
+                    </a>
+                </div>
+
+                <!-- YouTube Tutorials -->
+                <div>
+                    <h6 class="text-white fw-bold mb-2">
+                        <i class="bi bi-youtube text-danger me-2"></i>Recommended YouTube Tutorials
+                    </h6>
+                    <a href="https://www.youtube.com/results?search_query=ai+red+teaming+adversarial+testing+llm+explained" target="_blank" rel="noopener noreferrer" class="video-preview-card">
+                        <div class="yt-icon-box">
+                            <i class="bi bi-play-circle-fill"></i>
+                        </div>
+                        <div class="flex-grow-1">
+                            <div class="fw-semibold small text-white">AI Red Teaming &amp; Adversarial Testing Explained</div>
+                            <div class="text-muted" style="font-size: 0.75rem;">Learn how independent evaluation agents catch leaks and security flaws.</div>
+                        </div>
+                        <i class="bi bi-box-arrow-up-right text-danger"></i>
+                    </a>
+                    <a href="https://www.youtube.com/results?search_query=llm+evaluation+guardrails+rag+triad" target="_blank" rel="noopener noreferrer" class="video-preview-card">
+                        <div class="yt-icon-box">
+                            <i class="bi bi-play-circle-fill"></i>
+                        </div>
+                        <div class="flex-grow-1">
+                            <div class="fw-semibold small text-white">Automated LLM Evaluation &amp; Guardrails in Production</div>
+                            <div class="text-muted" style="font-size: 0.75rem;">How production systems compute automated compliance scores before releasing output.</div>
+                        </div>
+                        <i class="bi bi-box-arrow-up-right text-danger"></i>
+                    </a>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary btn-sm rounded-pill px-4" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
 </div>
 
 {% endblock %}

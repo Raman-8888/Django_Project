@@ -195,11 +195,44 @@
         padding: 1rem 1.75rem;
     }
     .guide-section-box {
-        background: rgba(30, 41, 59, 0.5);
-        border: 1px solid rgba(255, 255, 255, 0.08);
+        background: rgba(30, 41, 59, 0.65);
+        border: 1px solid rgba(255, 255, 255, 0.12);
         border-radius: 1rem;
         padding: 1.25rem;
         margin-bottom: 1.25rem;
+    }
+    .modal-cyber ul, 
+    .modal-cyber ol {
+        color: #e2e8f0 !important;
+    }
+    .modal-cyber li {
+        color: #e2e8f0 !important;
+        line-height: 1.65;
+        font-size: 0.88rem;
+    }
+    .modal-cyber p {
+        color: #f1f5f9 !important;
+        line-height: 1.65;
+    }
+    .modal-cyber strong {
+        color: #ffffff !important;
+        font-weight: 700 !important;
+    }
+    .modal-cyber code {
+        background: rgba(99, 102, 241, 0.25) !important;
+        color: #a5b4fc !important;
+        border: 1px solid rgba(99, 102, 241, 0.35);
+        padding: 0.15rem 0.4rem;
+        border-radius: 5px;
+        font-size: 0.85em;
+    }
+    .modal-cyber .text-muted,
+    .modal-cyber .text-dim {
+        color: #cbd5e1 !important;
+    }
+    .modal-cyber .resource-link-card .text-muted,
+    .modal-cyber .video-preview-card .text-muted {
+        color: #cbd5e1 !important;
     }
     .resource-link-card {
         background: rgba(30, 41, 59, 0.65);
@@ -601,11 +634,11 @@
                     <h6 class="text-white fw-bold mb-2">
                         <i class="bi bi-cpu-fill text-primary me-2"></i>Under The Hood (Technical Architecture)
                     </h6>
-                    <ul class="small text-muted mb-0 ps-3">
-                        <li class="mb-1"><strong class="text-light">Fast Window Slicing:</strong> Reads the first 1,500 characters of the document where titles, headers, and domain indicators reside.</li>
-                        <li class="mb-1"><strong class="text-light">Structured LLM Inference:</strong> Queries Google Gemini 3.8 Flash with low temperature (0.1) for deterministic JSON classification.</li>
-                        <li class="mb-1"><strong class="text-light">Domain Mapping:</strong> Resolves into 6 canonical categories: <code>CV</code>, <code>CONTRACT</code>, <code>MEDICAL</code>, <code>COURT_FILING</code>, <code>FINANCIAL</code>, or <code>OTHER</code>.</li>
-                        <li><strong class="text-light">Dynamic Policy Injection:</strong> Hands off domain-specific redaction guidelines from <code>agents/policies.py</code> to downstream detectors.</li>
+                    <ul class="ps-3 mb-0" style="color: #e2e8f0;">
+                        <li class="mb-2"><strong class="text-white">Fast Window Slicing:</strong> Reads the first 1,500 characters of the document where titles, headers, and domain indicators reside.</li>
+                        <li class="mb-2"><strong class="text-white">Structured LLM Inference:</strong> Queries Google Gemini 3.8 Flash with low temperature (0.1) for deterministic JSON classification.</li>
+                        <li class="mb-2"><strong class="text-white">Domain Mapping:</strong> Resolves into 6 canonical categories: <code>CV</code>, <code>CONTRACT</code>, <code>MEDICAL</code>, <code>COURT_FILING</code>, <code>FINANCIAL</code>, or <code>OTHER</code>.</li>
+                        <li class="mb-0"><strong class="text-white">Dynamic Policy Injection:</strong> Hands off domain-specific redaction guidelines from <code>agents/policies.py</code> to downstream detectors.</li>
                     </ul>
                 </div>
 
@@ -700,11 +733,11 @@
                     <h6 class="text-white fw-bold mb-2">
                         <i class="bi bi-cpu-fill text-primary me-2"></i>Under The Hood (Technical Architecture)
                     </h6>
-                    <ul class="small text-muted mb-0 ps-3">
-                        <li class="mb-1"><strong class="text-light">Deterministic Patterns:</strong> Compiled Python <code>re.VERBOSE</code> expressions matching PAN (<code>[A-Z]{5}[0-9]{4}[A-Z]</code>), Aadhaar (<code>\d{4}\s\d{4}\s\d{4}</code>), emails, phone numbers, and SSNs.</li>
-                        <li class="mb-1"><strong class="text-light">spaCy Transformer Engine:</strong> Named Entity Recognition (NER) labeling <code>PERSON</code>, <code>ORG</code>, <code>GPE</code>, and <code>DATE</code> tokens.</li>
-                        <li class="mb-1"><strong class="text-light">Gemini Flash LLM:</strong> Contextual reasoning pass returning exact character span coordinates <code>[start, end, text, entity_type]</code>.</li>
-                        <li><strong class="text-light">Span Merge Resolver:</strong> Merges overlapping candidate intervals, resolving conflicting boundaries without creating fragmented redactions.</li>
+                    <ul class="ps-3 mb-0" style="color: #e2e8f0;">
+                        <li class="mb-2"><strong class="text-white">Deterministic Patterns:</strong> Compiled Python <code>re.VERBOSE</code> expressions matching PAN (<code>[A-Z]{5}[0-9]{4}[A-Z]</code>), Aadhaar (<code>\d{4}\s\d{4}\s\d{4}</code>), emails, phone numbers, and SSNs.</li>
+                        <li class="mb-2"><strong class="text-white">spaCy Transformer Engine:</strong> Named Entity Recognition (NER) labeling <code>PERSON</code>, <code>ORG</code>, <code>GPE</code>, and <code>DATE</code> tokens.</li>
+                        <li class="mb-2"><strong class="text-white">Gemini Flash LLM:</strong> Contextual reasoning pass returning exact character span coordinates <code>[start, end, text, entity_type]</code>.</li>
+                        <li class="mb-0"><strong class="text-white">Span Merge Resolver:</strong> Merges overlapping candidate intervals, resolving conflicting boundaries without creating fragmented redactions.</li>
                     </ul>
                 </div>
 
@@ -797,11 +830,11 @@
                     <h6 class="text-white fw-bold mb-2">
                         <i class="bi bi-cpu-fill text-primary me-2"></i>Under The Hood (Technical Architecture)
                     </h6>
-                    <ul class="small text-muted mb-0 ps-3">
-                        <li class="mb-1"><strong class="text-light">Symmetric Window Slicing:</strong> Extracts <code>text[max(0, start - 100) : min(len(text), end + 100)]</code> around candidate spans.</li>
-                        <li class="mb-1"><strong class="text-light">Semantic Role Evaluation:</strong> Prompts Gemini 3.8 Flash to evaluate grammatical role, public vs private entity status, and semantic intent.</li>
-                        <li class="mb-1"><strong class="text-light">Confidence Scoring:</strong> Computes a confidence metric (0.0 to 1.0) and rationale.</li>
-                        <li><strong class="text-light">Threshold Filtering:</strong> Candidates scoring below 0.70 confidence or flagged as public non-PII terms are discarded immediately.</li>
+                    <ul class="ps-3 mb-0" style="color: #e2e8f0;">
+                        <li class="mb-2"><strong class="text-white">Symmetric Window Slicing:</strong> Extracts <code>text[max(0, start - 100) : min(len(text), end + 100)]</code> around candidate spans.</li>
+                        <li class="mb-2"><strong class="text-white">Semantic Role Evaluation:</strong> Prompts Gemini 3.8 Flash to evaluate grammatical role, public vs private entity status, and semantic intent.</li>
+                        <li class="mb-2"><strong class="text-white">Confidence Scoring:</strong> Computes a confidence metric (0.0 to 1.0) and rationale.</li>
+                        <li class="mb-0"><strong class="text-white">Threshold Filtering:</strong> Candidates scoring below 0.70 confidence or flagged as public non-PII terms are discarded immediately.</li>
                     </ul>
                 </div>
 
@@ -894,11 +927,11 @@
                     <h6 class="text-white fw-bold mb-2">
                         <i class="bi bi-cpu-fill text-primary me-2"></i>Under The Hood (Technical Architecture)
                     </h6>
-                    <ul class="small text-muted mb-0 ps-3">
-                        <li class="mb-1"><strong class="text-light">OpenXML Tree Navigation:</strong> Parses WordprocessingML nodes using <code>python-docx</code> and <code>lxml</code> (traversing <code>&lt;w:p&gt;</code>, <code>&lt;w:r&gt;</code>, <code>&lt;w:t&gt;</code>).</li>
-                        <li class="mb-1"><strong class="text-light">Run Property Deep Cloning:</strong> Clones the <code>&lt;w:rPr&gt;</code> XML node (font family, font size, bold, italic, color, kerning, underline) so the replacement mask matches the native design.</li>
-                        <li class="mb-1"><strong class="text-light">Multi-Run Span Splicing:</strong> Handles entities split across multiple runs by stitching text boundaries and replacing intermediate tokens.</li>
-                        <li><strong class="text-light">Nested Scope Traversal:</strong> Recursively processes headers, footers, body paragraphs, and nested table grid cells.</li>
+                    <ul class="ps-3 mb-0" style="color: #e2e8f0;">
+                        <li class="mb-2"><strong class="text-white">OpenXML Tree Navigation:</strong> Parses WordprocessingML nodes using <code>python-docx</code> and <code>lxml</code> (traversing <code>&lt;w:p&gt;</code>, <code>&lt;w:r&gt;</code>, <code>&lt;w:t&gt;</code>).</li>
+                        <li class="mb-2"><strong class="text-white">Run Property Deep Cloning:</strong> Clones the <code>&lt;w:rPr&gt;</code> XML node (font family, font size, bold, italic, color, kerning, underline) so the replacement mask matches the native design.</li>
+                        <li class="mb-2"><strong class="text-white">Multi-Run Span Splicing:</strong> Handles entities split across multiple runs by stitching text boundaries and replacing intermediate tokens.</li>
+                        <li class="mb-0"><strong class="text-white">Nested Scope Traversal:</strong> Recursively processes headers, footers, body paragraphs, and nested table grid cells.</li>
                     </ul>
                 </div>
 
@@ -990,11 +1023,11 @@
                     <h6 class="text-white fw-bold mb-2">
                         <i class="bi bi-cpu-fill text-primary me-2"></i>Under The Hood (Technical Architecture)
                     </h6>
-                    <ul class="small text-muted mb-0 ps-3">
-                        <li class="mb-1"><strong class="text-light">Black-Box Audit:</strong> Receives only the post-redaction text stream without accessing the detector's intermediate state or cache.</li>
-                        <li class="mb-1"><strong class="text-light">Adversarial Prompting:</strong> Instructs Gemini 3.8 Flash to hunt for partial leaks, obfuscated phone numbers (e.g. spelled out digits), and dangling personal identifiers.</li>
-                        <li class="mb-1"><strong class="text-light">Compliance Metric Calculation:</strong> Computes <code>compliance_score</code> (0-100), counts surviving risks, and assigns a verdict: <code>approved</code>, <code>flagged_for_review</code>, or <code>rejected</code>.</li>
-                        <li><strong class="text-light">Audit Trail Persistence:</strong> Synchronizes the full audit report with timestamp and scorecard into MongoDB Atlas for enterprise regulatory verification.</li>
+                    <ul class="ps-3 mb-0" style="color: #e2e8f0;">
+                        <li class="mb-2"><strong class="text-white">Black-Box Audit:</strong> Receives only the post-redaction text stream without accessing the detector's intermediate state or cache.</li>
+                        <li class="mb-2"><strong class="text-white">Adversarial Prompting:</strong> Instructs Gemini 3.8 Flash to hunt for partial leaks, obfuscated phone numbers (e.g. spelled out digits), and dangling personal identifiers.</li>
+                        <li class="mb-2"><strong class="text-white">Compliance Metric Calculation:</strong> Computes <code>compliance_score</code> (0-100), counts surviving risks, and assigns a verdict: <code>approved</code>, <code>flagged_for_review</code>, or <code>rejected</code>.</li>
+                        <li class="mb-0"><strong class="text-white">Audit Trail Persistence:</strong> Synchronizes the full audit report with timestamp and scorecard into MongoDB Atlas for enterprise regulatory verification.</li>
                     </ul>
                 </div>
 
